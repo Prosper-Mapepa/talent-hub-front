@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMU Talent Hub - Judges Handout</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0.08in;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #1a1a1a;
+            line-height: 1.45;
+            background: white;
+            font-size: 12.5px;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0;
+            background: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #8F1A27 0%, #6A0032 100%);
+            color: white;
+            padding: 18px 26px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .header .tagline {
+            font-size: 14.5px;
+            opacity: 0.95;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 1.1fr 0.95fr;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex: 1;
+            min-height: 0;
+        }
+        
+        .section {
+            background: #f8f9fa;
+            padding: 13px;
+            border-radius: 5px;
+            border-left: 4px solid #8F1A27;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .section h2 {
+            color: #8F1A27;
+            font-size: 16.5px;
+            font-weight: 800;
+            margin-bottom: 9px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: -0.2px;
+        }
+        
+        .section h2::before {
+            content: "▶";
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        .section p {
+            font-size: 11.5px;
+            color: #1a1a1a;
+            margin-bottom: 7px;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+        
+        .problem-box {
+            background: linear-gradient(to right, #fff3cd 0%, #fff8e1 100%);
+            border-left: 4px solid #ffc107;
+            padding: 11px;
+            border-radius: 4px;
+            margin-bottom: 0;
+        }
+        
+        .problem-box h3 {
+            color: #856404;
+            font-size: 12px;
+            margin-bottom: 6px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+        
+        .problem-box p {
+            font-size: 10.5px;
+            margin-bottom: 4px;
+            line-height: 1.5;
+            color: #1a1a1a;
+            font-weight: 400;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .stat-box {
+            background: white;
+            padding: 11px 8px;
+            border-radius: 5px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+        
+        .stat-number {
+            font-size: 26px;
+            font-weight: 800;
+            color: #8F1A27;
+            margin-bottom: 4px;
+            line-height: 1;
+            letter-spacing: -0.5px;
+        }
+        
+        .stat-label {
+            font-size: 9.5px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+        }
+        
+        .quote {
+            font-style: italic;
+            color: #8F1A27;
+            border-left: 3px solid #8F1A27;
+            padding-left: 10px;
+            margin: 7px 0;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.45;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 9px;
+            margin-top: 8px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 10.5px;
+            padding: 3px 0;
+        }
+        
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #8F1A27 0%, #6A0032 100%);
+            color: white !important;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(143, 26, 39, 0.25);
+            text-shadow: none;
+            letter-spacing: 0;
+        }
+        
+        .feature-item strong {
+            display: block;
+            font-size: 11px;
+            margin-bottom: 4px;
+            color: #1a1a1a;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .feature-item > div:last-child {
+            flex: 1;
+            line-height: 1.45;
+        }
+        
+        .advantage-item {
+            font-size: 10.5px;
+            margin-bottom: 6px;
+            line-height: 1.5;
+            color: #1a1a1a;
+            font-weight: 400;
+            padding-left: 2px;
+        }
+        
+        .advantage-item strong {
+            color: #0066cc;
+            font-weight: 800;
+            display: inline-block;
+            min-width: 75px;
+        }
+        
+        .highlight {
+            background: #FFC540;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 800;
+            color: #1a1a1a;
+            font-size: 10.5px;
+            display: inline-block;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #6A0032 0%, #8F1A27 100%);
+            color: white;
+            padding: 14px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        
+        .footer h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+            font-weight: 800;
+            letter-spacing: -0.2px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .footer p {
+            font-size: 11px;
+            opacity: 0.95;
+            line-height: 1.5;
+            font-weight: 400;
+            max-width: 96%;
+            margin: 0 auto;
+        }
+        
+        ul {
+            font-size: 10.5px;
+            margin-left: 18px;
+            margin-bottom: 7px;
+            line-height: 1.6;
+            color: #1a1a1a;
+            padding-left: 4px;
+        }
+        
+        li {
+            margin-bottom: 4px;
+            font-weight: 400;
+        }
+        
+        .value-box {
+            background: linear-gradient(to right, #e7f3ff 0%, #f0f7ff 100%);
+            border-left: 4px solid #0066cc;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+        
+        .value-box p {
+            font-size: 10.5px;
+            margin: 0;
+            color: #1a1a1a;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .container {
+                height: 7.84in;
+                max-height: 7.84in;
+                width: 11.16in;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .main-grid {
+                flex: 1;
+                min-height: 0;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            
+            .header, .footer {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>CMU TALENT <span style="color: #FEC72D;">HUB</span></h1>
+            <div class="tagline">Your Network is Your Net Worth!😃</div>
+        </div>
+        
+        <!-- Main Content Grid -->
+        <div class="main-grid">
+            <!-- Left Column: Problem & Solution -->
+            <div class="section">
+                <h2>The Problem</h2>
+                <div class="problem-box">
+                    <h3>73% of CMU students struggle to get discovered</h3>
+                    <p>Sarah, a brilliant CMU CS student, built award-winning projects but had zero connections at graduation. Less-talented peers landed dream jobs simply because they knew the right people.</p>
+                    <p style="margin-bottom: 0;"><strong>Meanwhile:</strong> Businesses waste hours sifting through generic platforms, unable to find the right CMU talent.</p>
+                </div>
+                
+                <h2 style="margin-top: 10px;">Our Solution</h2>
+                <p class="quote">"Your network is your net worth"</p>
+                <p style="margin-bottom: 0;">A verified, secure platform connecting CMU students with opportunities, peers, and businesses. Turning invisible talent into visible opportunities.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">15,000+</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">$200B+</div>
+                        <div class="stat-label">Market</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">25%</div>
+                        <div class="stat-label">Growth</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Middle Column: Features -->
+            <div class="section">
+                <h2>Key Features</h2>
+                <p style="font-size: 10.5px; margin-bottom: 9px; color: #555; line-height: 1.5;">Comprehensive platform designed to bridge the gap between student talent and opportunity discovery.</p>
+                <div class="features-grid" style="flex: 1;">
+                    <div class="feature-item">
+                        <div class="feature-icon" style="color: white !important;">✓</div>
+                        <div>
+                            <strong>Rich Portfolios</strong>
+                            Videos, images, and code repositories showcase student work. Multiple file uploads per talent listing.
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon" style="color: white !important;">✓</div>
+                        <div>
+                            <strong>Talent Discovery</strong>
+                            Advanced search and filter by skills, major, year. Browse verified student profiles with detailed portfolios.
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon" style="color: white !important;">✓</div>
+                        <div>
+                            <strong>Job Listings</strong>
+                            Post opportunities, manage applications, and track candidates. Business dashboard for streamlined hiring.
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon" style="color: white !important;">✓</div>
+                        <div>
+                            <strong>Real-time Messaging</strong>
+                            Secure in-app messaging system. Direct communication between students, faculty, and businesses.
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon" style="color: white !important;">✓</div>
+                        <div>
+                            <strong>Verified Profiles</strong>
+                            CMU email verification required. All students authenticated through university credentials for trust.
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon" style="color: white !important;">✓</div>
+                        <div>
+                            <strong>Mobile & Web</strong>
+                            Cross-platform access. React Native mobile app + Next.js responsive web platform for seamless experience.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column: Market & Competitive -->
+            <div class="section">
+                <h2>Market Opportunity</h2>
+                <p style="margin-bottom: 6px;"><strong>Target Customers:</strong></p>
+                <ul style="margin-bottom: 10px;">
+                    <li>15,000+ CMU students</li>
+                    <li>1,400+ faculty members</li>
+                    <li>Hundreds of recruiting businesses</li>
+                </ul>
+                <p style="margin-bottom: 8px;"><strong>Market Size:</strong> Global talent platform market exceeds <span class="highlight">$200 billion</span>, growing at <span class="highlight">25% annually</span>. U.S. student job market: $15+ billion.</p>
+                <p style="margin-bottom: 0;"><strong>Expansion:</strong> Start with CMU, then expand to MIT, Stanford, and other top-tier universities.</p>
+                
+                <h2 style="margin-top: 10px;">Competitive Advantage</h2>
+                <div class="advantage-item">
+                    <strong>vs LinkedIn:</strong> Purpose-built for students with portfolio-first design
+                </div>
+                <div class="advantage-item">
+                    <strong>vs Job Boards:</strong> Verified, exclusive to CMU, ensuring quality
+                </div>
+                <div class="advantage-item" style="margin-bottom: 10px;">
+                    <strong>vs Upwork:</strong> Focus on long-term networks, not transactions
+                </div>
+                
+                <div class="value-box" style="margin-top: auto;">
+                    <p><strong>Unique Value:</strong> Only platform combining verified profiles, rich media portfolios, real-time messaging, and exclusive CMU access. We're building a community, not just a platform.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer CTA -->
+        <div class="footer">
+            <div style="font-size: 15px;"><span style="color: #FEC72D; font-weight: 800;">Join me</span> in shaping the future of opportunity, and let’s make every talent impossible to ignore.</div>
+            <!-- <p>We invite you to invest in CMU Talent Hub. With your support, we'll expand to more universities and ensure every talented student gets the opportunity they deserve. Let's build the future together—where talent meets opportunity.</p> -->
+        </div>
+    </div>
+</body>
+</html>

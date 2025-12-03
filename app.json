@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "6c631a05-9ba5-4202-ad44-0348f65f74ea"
+      }
+    },
+    "android": {
+      "package": "com.prospermap.cmutalenthubb"
+    }
+  }
+}
