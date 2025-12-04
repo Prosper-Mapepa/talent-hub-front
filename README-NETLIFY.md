@@ -34,7 +34,7 @@ Set the following environment variables in Netlify:
 3. **Set Environment Variables:**
    - Go to Site settings → Environment variables
    - Add `NEXT_PUBLIC_API_URL` with your backend URL
-   - Example: `https://your-backend.railway.app`
+   - **Value:** `https://web-production-11221.up.railway.app`
 
 4. **Deploy:**
    - Click "Deploy site"
