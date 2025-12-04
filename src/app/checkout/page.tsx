@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -59,7 +59,6 @@ const mockServices = {
 }
 
 export default function CheckoutPage() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const serviceId = searchParams.get("serviceId") || "1"
 
@@ -151,7 +150,7 @@ export default function CheckoutPage() {
               </div>
             </div>
             <p className="text-muted-foreground">
-              We've sent a confirmation email to your registered email address. You can also view your order details in
+              We&apos;ve sent a confirmation email to your registered email address. You can also view your order details in
               your dashboard.
             </p>
           </CardContent>

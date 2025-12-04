@@ -216,9 +216,9 @@ export default function StudentsPage() {
                 {/* Enhanced Profile Picture */}
                 <div className="relative mb-1 mt-3">
                   <div className="relative h-24 w-24 rounded-full bg-gradient-to-br from-[#8F1A27]/10 to-[#6D0432]/10 border-4 border-[#8F1A27]/20 shadow-lg group-hover:scale-105 transition-transform duration-300 overflow-hidden">
-                    {(student.profileImage || student.user?.profileImage) ? (
+                    {(student.profileImage || (student.user as { profileImage?: string })?.profileImage) ? (
                       <Image
-                        src={getFileUrl(student.profileImage || student.user?.profileImage || "")}
+                        src={getFileUrl(student.profileImage || (student.user as { profileImage?: string })?.profileImage || "")}
                         alt={`${student.firstName} ${student.lastName}`}
                         width={96}
                         height={96}
@@ -242,7 +242,7 @@ export default function StudentsPage() {
                     <div 
                       className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-[#8F1A27] bg-gradient-to-br from-[#8F1A27]/10 to-[#6D0432]/10"
                       data-fallback
-                      style={{ display: (student.profileImage || student.user?.profileImage) ? 'none' : 'flex' }}
+                      style={{ display: (student.profileImage || (student.user as { profileImage?: string })?.profileImage) ? 'none' : 'flex' }}
                     >
                       {getUserInitials(student.firstName, student.lastName)}
                     </div>
@@ -285,10 +285,10 @@ export default function StudentsPage() {
                   </div>
                   
                   {/* Brief Bio */}
-                  {student.about && (
+                  {(student as unknown as { about?: string }).about && (
                     <div className="mb-4 px-2">
                       <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 font-normal text-left">
-                        {student.about.length > 120 ? `${student.about.substring(0, 120)}...` : student.about}
+                        {((student as unknown as { about: string }).about.length > 120) ? `${(student as unknown as { about: string }).about.substring(0, 120)}...` : (student as unknown as { about: string }).about}
                       </p>
                     </div>
                   )}

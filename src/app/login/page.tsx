@@ -5,10 +5,9 @@ import Link from "next/link"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { login, clearError } from '@/lib/slices/authSlice';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -166,7 +165,7 @@ export default function LoginPage() {
             </Button>
           </form>
           <div className="mt-8 text-center text-sm">
-            <span className="text-muted-foreground">Don't have an account? </span>
+            <span className="text-muted-foreground">Don&apos;t have an account? </span>
             <Link href="/register" className="text-[#8F1A27] hover:underline font-bold">
               SignUp
             </Link>

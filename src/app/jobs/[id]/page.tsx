@@ -6,7 +6,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Building, MapPin, Calendar, DollarSign, User, Briefcase, Clock, ArrowLeft, Mail } from "lucide-react";
+import { Loader2, Building, MapPin, DollarSign, User, Briefcase, Calendar, ArrowLeft, Mail } from "lucide-react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { fetchJobById, applyForJob } from '@/lib/slices/jobsSlice';
@@ -31,9 +31,9 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
   }, [error]);
 
   // Helper to check if a job has been applied by the current student
-  const hasAppliedToJob = (job: any) => {
+  const hasAppliedToJob = (job: { applications?: Array<{ student?: { id: string } }> }) => {
     if (!user?.studentId || !job.applications) return false;
-    return job.applications.some((app: any) => app.student?.id === user.studentId);
+    return job.applications.some((app: { student?: { id: string } }) => app.student?.id === user.studentId);
   };
 
   const handleApply = () => {
@@ -100,7 +100,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
             Job Details
           </h1>
           <p className="text-lg text-gray-600">
-            Explore this opportunity and apply if it's the right fit for you
+            Explore this opportunity and apply if it&apos;s the right fit for you
           </p>
         </div>
         

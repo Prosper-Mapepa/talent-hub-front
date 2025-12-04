@@ -90,7 +90,7 @@ export default function PostJobPage() {
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>What happens next?</AlertTitle>
               <AlertDescription>
-                Students will now be able to view your job posting and submit applications. You'll receive notifications
+                Students will now be able to view your job posting and submit applications. You&apos;ll receive notifications
                 when new applications arrive.
               </AlertDescription>
             </Alert>
@@ -130,7 +130,7 @@ export default function PostJobPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Job Details</CardTitle>
-                <CardDescription>Provide basic information about the job you're posting</CardDescription>
+                <CardDescription>Provide basic information about the job you&apos;re posting</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">

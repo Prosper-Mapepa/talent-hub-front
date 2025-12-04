@@ -11,11 +11,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Search, Briefcase, User, MessageSquare, BookOpen, Award, MapPin, Building, Calendar, Users } from 'lucide-react';
+import { Loader2, Search, Briefcase, User, MessageSquare, Award, MapPin, Building, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 import { AddProjectForm, AddAchievementForm } from '@/components/portfolio-forms';
 import EditableSkills from '@/components/EditableSkills';
@@ -24,13 +23,12 @@ import type { Project, Achievement } from '@/lib/slices/studentsSlice';
 import { ProjectEditForm, AchievementEditForm } from '@/components/portfolio-forms';
 import Image from "next/image";
 import apiClient from '@/lib/apiClient';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { jobs, isLoading: jobsLoading, error: jobsError } = useAppSelector((state) => state.jobs);
-  const { student, isLoading: profileLoading, error: profileError } = useAppSelector((state) => state.students);
+  const { student, error: profileError } = useAppSelector((state) => state.students);
   const { conversations } = useAppSelector((state) => state.messages);
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,11 +37,11 @@ export default function DashboardPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [applyingJobId, setApplyingJobId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('jobs');
-  const [viewJob, setViewJob] = useState<any>(null);
+  const [viewJob, setViewJob] = useState<{ id: string; title: string; description: string; type: string; experienceLevel?: string; location?: string; salary?: string; business?: { businessName: string; location?: string }; applications?: Array<{ student?: { id: string } }> } | null>(null);
   const [isViewJobOpen, setIsViewJobOpen] = useState(false);
-  const [talents, setTalents] = useState<any[]>([]);
+  const [talents, setTalents] = useState<Array<{ id: string; title: string; category?: string; description?: string }>>([]);
   const [talentForm, setTalentForm] = useState({ title: '', category: '', description: '' });
-  const [editingTalent, setEditingTalent] = useState<any>(null);
+  const [editingTalent, setEditingTalent] = useState<{ id: string; title: string; category?: string; description?: string } | null>(null);
   const [talentLoading, setTalentLoading] = useState(false);
 
   useEffect(() => {
@@ -55,14 +53,14 @@ export default function DashboardPage() {
   const [aboutForm, setAboutForm] = useState({
     major: student?.major || '',
     year: student?.year || '',
-    about: student?.about || '',
+    about: (student as { about?: string })?.about || '',
   });
   useEffect(() => {
     if (student) {
       setAboutForm({
         major: student.major || '',
         year: student.year || '',
-        about: student.about || '',
+        about: (student as { about?: string }).about || '',
       });
     }
   }, [student]);
@@ -160,18 +158,18 @@ export default function DashboardPage() {
   };
 
   // Helper to check if a job has been applied by the current student
-  const hasAppliedToJob = (job: any) => {
+  const hasAppliedToJob = (job: { applications?: Array<{ student?: { id: string } }> }) => {
     if (!user?.studentId || !job.applications) return false;
-    return job.applications.some((app: any) => app.student?.id === user.studentId);
+    return job.applications.some((app: { student?: { id: string } }) => app.student?.id === user.studentId);
   };
 
   // Calculate unique conversations count
   const totalConversations = useMemo(() => {
     if (!user?.id || !Array.isArray(conversations)) return 0;
     
-    const uniqueParticipantIds = new Set();
+    const uniqueParticipantIds = new Set<string>();
     conversations.forEach(conversation => {
-      const otherParticipant = conversation.participants?.find((p: any) => p.id !== user.id);
+      const otherParticipant = conversation.participants?.find((p: { id: string }) => p.id !== user.id);
       if (otherParticipant) {
         uniqueParticipantIds.add(otherParticipant.id);
       }
@@ -194,7 +192,7 @@ export default function DashboardPage() {
     .flatMap(job => (job.applications || []))
     .filter(app => app.student && app.student.id === user?.studentId)
     .length;
-  const profileViews = typeof (student as any)?.profileViews === 'number' ? (student as any).profileViews : 0;
+  const profileViews = student && typeof (student as unknown as { profileViews?: number }).profileViews === 'number' ? (student as unknown as { profileViews: number }).profileViews : 0;
 
   // Fetch talents for the logged-in student
   useEffect(() => {
@@ -222,9 +220,9 @@ export default function DashboardPage() {
     setTalentLoading(false);
   };
 
-  const handleEditTalent = (talent: any) => {
+  const handleEditTalent = (talent: { id: string; title: string; category?: string; description?: string }) => {
     setEditingTalent(talent);
-    setTalentForm({ title: talent.title, category: talent.category, description: talent.description });
+    setTalentForm({ title: talent.title, category: talent.category || '', description: talent.description || '' });
   };
 
   const handleUpdateTalent = async () => {
@@ -516,10 +514,10 @@ export default function DashboardPage() {
                         <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">{viewJob.description}</p>
                       </div>
                       <div className="flex flex-wrap gap-4 text-sm">
-                        <span className="flex items-center"><MapPin className="h-4 w-4 mr-1" />{viewJob.business?.location || 'Remote'}</span>
+                        <span className="flex items-center"><MapPin className="h-4 w-4 mr-1" />{viewJob.location || (viewJob.business as { location?: string })?.location || 'Remote'}</span>
                         {viewJob.salary && <span className="flex items-center text-green-700 dark:text-green-400"><span className="font-semibold ml-1">${viewJob.salary.replace(/[^.,-]/g, '')}</span></span>}
                         <Badge className={getJobTypeColor(viewJob.type)}>{viewJob.type.replace('_', ' ')}</Badge>
-                        <Badge className={getExperienceColor(viewJob.experienceLevel)}>{viewJob.experienceLevel.replace('_', ' ')}</Badge>
+                        {viewJob.experienceLevel && <Badge className={getExperienceColor(viewJob.experienceLevel)}>{viewJob.experienceLevel.replace('_', ' ')}</Badge>}
                       </div>
                       {user?.role === 'student' && (
                         <Button 
@@ -645,7 +643,7 @@ export default function DashboardPage() {
                             <ProjectEditForm
                               project={selectedProject}
                               studentId={student?.id || ''}
-                              onSuccess={() => { setShowProjectModal(false); student?.id && dispatch(fetchStudentProfile(student.id)); }}
+                              onSuccess={() => { setShowProjectModal(false); if (student?.id) { dispatch(fetchStudentProfile(student.id)); } }}
                             />
                             {/* Display images and files as in student profile page */}
                             {selectedProject.images && Array.isArray(selectedProject.images) && selectedProject.images.length > 0 && (
@@ -682,7 +680,7 @@ export default function DashboardPage() {
                                     <h4 className="font-semibold mb-2">Other Files</h4>
                                     <ul className="space-y-2">
                                       {selectedProject.images
-                                        .map((img, i) =>
+                                        .map((img: string, i: number) =>
                                           !img.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
                                             <li key={i}>
                                               <a
@@ -716,7 +714,7 @@ export default function DashboardPage() {
                             <AchievementEditForm
                               achievement={selectedAchievement}
                               studentId={student?.id || ''}
-                              onSuccess={() => { setShowAchievementModal(false); student?.id && dispatch(fetchStudentProfile(student.id)); }}
+                              onSuccess={() => { setShowAchievementModal(false); if (student?.id) { dispatch(fetchStudentProfile(student.id)); } }}
                             />
                             {/* Display images and files as in student profile page */}
                             {selectedAchievement.files && Array.isArray(selectedAchievement.files) && selectedAchievement.files.length > 0 && (

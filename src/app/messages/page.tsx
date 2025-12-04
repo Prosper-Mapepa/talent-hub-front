@@ -1,34 +1,30 @@
 "use client"
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { fetchConversations, createConversation, fetchMessages, sendMessage } from '@/lib/slices/messagesSlice';
 import ProtectedRoute from '@/components/protected-route';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Send, Search, MoreVertical, Phone, Video } from 'lucide-react';
+import { Loader2, Send, Search } from 'lucide-react';
 import { toast, Toaster } from 'react-hot-toast';
 import { useSearchParams } from 'next/navigation';
 import { fetchStudents, fetchStudentById } from '@/lib/slices/studentsSlice';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-export default function MessagesPage() {
+function MessagesPageContent() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { conversations, messages, isLoading, error } = useAppSelector((state) => state.messages);
   const { students, isLoading: studentsLoading } = useAppSelector((state) => state.students);
 
-  const [selectedConversation, setSelectedConversation] = useState<any>(null);
+  const [selectedConversation, setSelectedConversation] = useState<{ id: string; participants?: Array<{ id: string; firstName?: string; lastName?: string; email?: string; profileImage?: string }>; lastMessage?: { content: string; createdAt: string } } | null>(null);
   const [newMessage, setNewMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [isSending, setIsSending] = useState(false);
-  const [studentInfo, setStudentInfo] = useState<any>(null);
-  const [chatLoadError, setChatLoadError] = useState<string | null>(null);
 
   const searchParams = useSearchParams();
   const studentId = searchParams.get('studentId');
@@ -40,26 +36,26 @@ export default function MessagesPage() {
   const otherUserId = student?.user?.id;
 
   // Simple helper functions
-  const getParticipantName = (conversation: any, currentUserId: string) => {
+  const getParticipantName = (conversation: { participants?: Array<{ id: string; firstName?: string; lastName?: string; role?: string }> }, currentUserId: string) => {
     if (!conversation?.participants || !Array.isArray(conversation.participants)) {
       return 'Unknown User';
     }
     
-    const otherParticipant = conversation.participants.find((p: any) => p?.id !== currentUserId);
+    const otherParticipant = conversation.participants.find((p: { id: string; role?: string }) => p?.id !== currentUserId);
     if (!otherParticipant || !otherParticipant.id) {
       return 'Unknown User';
     }
     
-    if (otherParticipant.role === 'student') {
+    if ((otherParticipant as { role?: string }).role === 'student') {
       const studentRecord = students?.find(s => s?.user?.id === otherParticipant.id);
       if (studentRecord) {
         return `${studentRecord.firstName} ${studentRecord.lastName}`;
       }
     } else if (otherParticipant.role === 'business') {
-      return otherParticipant.email || 'Business User';
+      return (otherParticipant as { email?: string }).email || 'Business User';
     }
     
-    return otherParticipant.email || 'Unknown User';
+    return (otherParticipant as { email?: string }).email || 'Unknown User';
   };
 
   const getParticipantInitials = (conversation: any, currentUserId: string) => {
@@ -91,7 +87,7 @@ export default function MessagesPage() {
     }
     dispatch(fetchStudents());
     if (studentId) {
-      dispatch(fetchStudentById(studentId)).unwrap().then(setStudentInfo);
+      dispatch(fetchStudentById(studentId));
     }
   }, [dispatch, studentId, user?.id]);
 
@@ -116,8 +112,8 @@ export default function MessagesPage() {
               dispatch(fetchMessages(response.id));
             }
           })
-          .catch((err) => {
-            setChatLoadError('Unable to start chat.');
+          .catch(() => {
+            // Error handling - could show toast here
           });
       }
     }
@@ -593,5 +589,13 @@ export default function MessagesPage() {
         </div>
       </div>
     </ProtectedRoute>
+  );
+}
+
+export default function MessagesPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+      <MessagesPageContent />
+    </Suspense>
   );
 }

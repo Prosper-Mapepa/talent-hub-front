@@ -207,7 +207,7 @@ export default function BusinessModelPage() {
               <Lightbulb className="h-16 w-16 mx-auto mb-4 text-yellow-300" />
               <h3 className="text-3xl font-bold mb-4">Primary Value Proposition</h3>
               <p className="text-xl font-medium leading-relaxed">
-                "Find other CMU Students with the Skills you need and Interests you share"
+                &quot;Find other CMU Students with the Skills you need and Interests you share&quot;
               </p>
             </CardContent>
           </Card>
@@ -271,14 +271,14 @@ export default function BusinessModelPage() {
                 <div className="bg-green-50 rounded-lg p-4">
                   <h4 className="font-semibold text-green-900 mb-2">Regional Impact</h4>
                   <p className="text-green-800 text-sm">
-                    Leveraging Michigan's business ecosystem to provide students with 
+                    Leveraging Michigan&apos;s business ecosystem to provide students with 
                     local opportunities while building regional talent networks.
                   </p>
                 </div>
                 <div className="bg-purple-50 rounded-lg p-4">
                   <h4 className="font-semibold text-purple-900 mb-2">Technology Integration</h4>
                   <p className="text-purple-800 text-sm">
-                    Seamless integration with CMU's existing systems and infrastructure 
+                    Seamless integration with CMU&apos;s existing systems and infrastructure 
                     to provide a unified student experience.
                   </p>
                 </div>

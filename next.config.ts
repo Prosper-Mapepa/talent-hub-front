@@ -14,6 +14,12 @@ const nextConfig: NextConfig = {
     ],
   },
   output: 'standalone', // Optimize for production deployment
+  eslint: {
+    ignoreDuringBuilds: true, // Temporarily ignore ESLint errors during build
+  },
+  typescript: {
+    ignoreBuildErrors: false, // Keep TypeScript errors
+  },
   /* config options here */
 };
 

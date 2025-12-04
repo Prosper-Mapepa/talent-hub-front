@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import apiClient from '../apiClient';
+import { User } from './authSlice';
 
 // Types
 export interface Student {
@@ -89,6 +90,7 @@ export interface StudentsState {
 // Initial state
 const initialState: StudentsState = {
   students: [],
+  student: null,
   currentStudent: null,
   isLoading: false,
   error: null,

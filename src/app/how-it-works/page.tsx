@@ -325,7 +325,7 @@ export default function HowItWorksPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600">
-                    Our messaging system is protected with end-to-end encryption to ensure privacy and security. All messages are encrypted and decrypted on the client's device. 
+                    Our messaging system is protected with end-to-end encryption to ensure privacy and security. All messages are encrypted and decrypted on the client&apos;s device. 
                 </p>
               </CardContent>
             </Card>

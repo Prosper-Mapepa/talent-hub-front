@@ -108,7 +108,7 @@ export default function ProductsPage() {
 
   // Auto-advance images
   useEffect(() => {
-    const intervals: number[] = [];
+    const intervals: ReturnType<typeof setInterval>[] = [];
     
     products.forEach((product) => {
       const interval = setInterval(() => {

@@ -17,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Loader2, Plus, Briefcase, Users, MessageSquare, Building, MapPin, Calendar, Edit, Trash2, Eye, User, Clock, DollarSign, GraduationCap } from 'lucide-react';
+import { Loader2, Plus, Briefcase, Users, MessageSquare, Building, MapPin, Edit, Trash2, User, Clock, DollarSign, GraduationCap } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -34,7 +34,7 @@ export default function BusinessDashboardPage() {
   const { students } = useAppSelector((state) => state.students);
   const [isCreateJobOpen, setIsCreateJobOpen] = useState(false);
   const [isEditJobOpen, setIsEditJobOpen] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<any>(null);
+  const [selectedJob, setSelectedJob] = useState<{ id: string; title: string; description: string; type: string; experienceLevel: string; location?: string; salary?: string; status?: string; createdAt?: string } | null>(null);
   const [newJob, setNewJob] = useState({
     title: '',
     description: '',
@@ -54,23 +54,14 @@ export default function BusinessDashboardPage() {
     website: '',
   });
   const [updatingProfile, setUpdatingProfile] = useState(false);
-  const [allApplications, setAllApplications] = useState<any[]>([]);
+  const [allApplications, setAllApplications] = useState<Array<{ id: string; student?: { id: string; firstName?: string; lastName?: string }; job?: { id: string; title: string }; status: string; createdAt: string }>>([]);
   const [activeTab, setActiveTab] = useState('jobs');
   const router = useRouter();
-  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [selectedStudent, setSelectedStudent] = useState<{ id: string; firstName?: string; lastName?: string; email?: string; profileImage?: string; major?: string; year?: string; graduationYear?: string; gpa?: string; bio?: string; skills?: Array<{ id: string; name: string; proficiency?: string }>; achievements?: Array<{ id: string; title: string; description?: string; date?: string; issuer?: string }>; projects?: Array<{ id: string; title: string; description?: string; technologies?: string[]; url?: string }>; talents?: Array<{ id: string; title: string; description?: string; category?: string }>; createdAt?: string; profileViews?: number } | null>(null);
   const [showStudentModal, setShowStudentModal] = useState(false);
-  const [showMessages, setShowMessages] = useState(false);
-  const [viewJob, setViewJob] = useState<any>(null);
+  const [showMessages] = useState(false);
+  const [viewJob, setViewJob] = useState<{ id: string; title: string; description: string; type: string; experienceLevel?: string; location?: string; salary?: string; status?: string } | null>(null);
   const [isViewJobOpen, setIsViewJobOpen] = useState(false);
-
-  // Only after all hooks, do the conditional return
-  if (!user || !user.businessId) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
 
   useEffect(() => {
     if (activeTab === 'applications' && typeof user?.businessId === 'string') {
@@ -134,9 +125,9 @@ export default function BusinessDashboardPage() {
   const totalConversations = useMemo(() => {
     if (!user?.id || !Array.isArray(conversations)) return 0;
     
-    const uniqueParticipantIds = new Set();
+    const uniqueParticipantIds = new Set<string>();
     conversations.forEach(conversation => {
-      const otherParticipant = conversation.participants?.find((p: any) => p.id !== user.id);
+      const otherParticipant = conversation.participants?.find((p: { id: string }) => p.id !== user.id);
       if (otherParticipant) {
         uniqueParticipantIds.add(otherParticipant.id);
       }
@@ -218,14 +209,14 @@ export default function BusinessDashboardPage() {
   console.log('profileForm',profileForm);
   
 
-  const openEditJob = (job: any) => {
-    setSelectedJob(job);
+  const openEditJob = (job: { id: string; title: string; description: string; type: string; experienceLevel: string; location?: string; salary?: string }) => {
+    setSelectedJob(job as { id: string; title: string; description: string; type: string; experienceLevel: string; location?: string; salary?: string; status?: string; createdAt?: string });
     setNewJob({
       title: job.title,
       description: job.description,
       type: job.type,
       experienceLevel: job.experienceLevel,
-      location: job.location,
+      location: job.location || '',
       salary: job.salary || '',
     });
     setIsEditJobOpen(true);
@@ -313,6 +304,15 @@ export default function BusinessDashboardPage() {
       bgColor: "bg-[#8F1A27]/10"
     }
   ];
+
+  // Only after all hooks, do the conditional return
+  if (!user || !user.businessId) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
         <ProtectedRoute allowedRoles={['business']}>
@@ -617,7 +617,7 @@ export default function BusinessDashboardPage() {
                                 }>
                                   {app.status.charAt(0).toUpperCase() + app.status.slice(1).toLowerCase()}
                                 </Badge>
-                                <Button size="sm" variant="outline" onClick={() => { setSelectedStudent(app.student); setShowStudentModal(true); }}>
+                                <Button size="sm" variant="outline" onClick={() => { if (app.student) { setSelectedStudent(app.student as { id: string; firstName?: string; lastName?: string; email?: string; profileImage?: string; major?: string; year?: string; graduationYear?: string; gpa?: string; bio?: string; skills?: Array<{ id: string; name: string; proficiency?: string }>; achievements?: Array<{ id: string; title: string; description?: string; date?: string; issuer?: string }>; projects?: Array<{ id: string; title: string; description?: string; technologies?: string[]; url?: string }>; talents?: Array<{ id: string; title: string; description?: string; category?: string }>; createdAt?: string; profileViews?: number }); setShowStudentModal(true); } }}>
                                   View Profile
                                 </Button>
                                 <Button size="sm" variant="secondary" onClick={() => router.push(`/messages?studentId=${app.student?.id}`)}>
@@ -798,7 +798,7 @@ export default function BusinessDashboardPage() {
                               <div className="bg-gray-50 rounded-lg p-6">
                                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Technical Skills</h3>
                                 <div className="flex flex-wrap gap-3">
-                                  {selectedStudent.skills.map((skill: any) => (
+                                  {selectedStudent.skills.map((skill: { id: string; name: string; proficiency?: string }) => (
                                     <div key={skill.id} className="bg-white border border-gray-200 rounded-lg px-4 py-2 shadow-sm">
                                       <div className="font-medium text-gray-900">{skill.name}</div>
                                       {skill.proficiency && (
@@ -821,7 +821,7 @@ export default function BusinessDashboardPage() {
                               <div className="bg-gray-50 rounded-lg p-6">
                                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Achievements & Awards</h3>
                                 <div className="space-y-4">
-                                  {selectedStudent.achievements.map((ach: any) => (
+                                  {selectedStudent.achievements.map((ach: { id: string; title: string; description?: string; date?: string; issuer?: string }) => (
                                     <div key={ach.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                                       <div className="font-semibold text-gray-900 text-lg">{ach.title}</div>
                                       {ach.description && (
@@ -850,7 +850,7 @@ export default function BusinessDashboardPage() {
                               <div className="bg-gray-50 rounded-lg p-6">
                                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Projects</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                  {selectedStudent.projects.map((proj: any) => (
+                                  {selectedStudent.projects.map((proj: { id: string; title: string; description?: string; technologies?: string[]; url?: string }) => (
                                     <div key={proj.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                                       <div className="font-semibold text-gray-900 text-lg mb-2">{proj.title}</div>
                                       {proj.description && (
@@ -892,7 +892,7 @@ export default function BusinessDashboardPage() {
                               <div className="bg-gray-50 rounded-lg p-6">
                                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Special Talents</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                  {selectedStudent.talents.map((talent: any) => (
+                                  {selectedStudent.talents.map((talent: { id: string; title: string; description?: string; category?: string }) => (
                                     <div key={talent.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                                       <div className="font-semibold text-gray-900 text-lg mb-2">{talent.title}</div>
                                       {talent.description && (

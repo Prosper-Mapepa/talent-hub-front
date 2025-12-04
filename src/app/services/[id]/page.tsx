@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import { toast, Toaster } from "react-hot-toast"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -104,14 +104,15 @@ const mockService = {
   ],
 }
 
-export default function ServicePage({ params }: { params: { id: string } }) {
+export default function ServicePage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
   const dispatch = useAppDispatch();
   const { currentService: service, isLoading, error } = useAppSelector((state) => state.services);
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(fetchServiceById(params.id));
-  }, [dispatch, params.id]);
+    dispatch(fetchServiceById(resolvedParams.id));
+  }, [dispatch, resolvedParams.id]);
 
   useEffect(() => {
     if (error) toast.error(error);
@@ -298,7 +299,7 @@ export default function ServicePage({ params }: { params: { id: string } }) {
                 <span>{service.revisions}</span>
               </div>
               <Button className="w-full bg-red-600 hover:bg-red-700" asChild>
-                <Link href={`/checkout?serviceId=${params.id}`}>Request This Service</Link>
+                <Link href={`/checkout?serviceId=${resolvedParams.id}`}>Request This Service</Link>
               </Button>
               <Button variant="outline" className="w-full" onClick={handleContactSeller}>
                 <MessageSquare className="mr-2 h-4 w-4" />

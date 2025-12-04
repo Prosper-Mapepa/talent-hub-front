@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/hooks"
 import { fetchJobs, applyForJob } from "@/lib/slices/jobsSlice"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Search, Briefcase, Building, MapPin, Calendar, Clock, DollarSign, Filter, X } from "lucide-react"
+import { Loader2, Search, Briefcase, Building, MapPin, Clock, DollarSign, Filter, X } from "lucide-react"
 import Link from "next/link"
 import { toast } from 'sonner'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -26,7 +26,7 @@ export default function JobsPage() {
   const [selectedExperience, setSelectedExperience] = useState("all")
   const [selectedLocation, setSelectedLocation] = useState("all")
   const [showFilters, setShowFilters] = useState(false)
-  const [viewJob, setViewJob] = useState<any>(null);
+  const [viewJob] = useState<{ id: string; title: string; description: string; type: string; experienceLevel?: string; location?: string; salary?: string; business?: { businessName: string }; applications?: Array<{ student?: { id: string } }> } | null>(null);
   const [isViewJobOpen, setIsViewJobOpen] = useState(false);
   const router = useRouter();
 
@@ -64,9 +64,9 @@ export default function JobsPage() {
   }
 
   // Helper to check if a job has been applied by the current student
-  const hasAppliedToJob = (job: any) => {
+  const hasAppliedToJob = (job: { applications?: Array<{ student?: { id: string } }> }) => {
     if (!user?.studentId || !job.applications) return false;
-    return job.applications.some((app: any) => app.student?.id === user.studentId);
+    return job.applications.some((app: { student?: { id: string } }) => app.student?.id === user.studentId);
   };
 
   const filteredJobs = jobs.filter(job => {
@@ -332,7 +332,7 @@ console.log('Sample job data:', filteredJobs[0]);
                   <span className="flex items-center"><MapPin className="h-4 w-4 mr-1" />{viewJob.location || 'Remote'}</span>
                   {viewJob.salary && <span className="flex items-center text-green-700"><span className="font-semibold ml-1">{viewJob.salary}</span></span>}
                   <Badge className={getJobTypeColor(viewJob.type)}>{viewJob.type.replace('_', ' ')}</Badge>
-                  <Badge className={getExperienceColor(viewJob.experienceLevel)}>{viewJob.experienceLevel.replace('_', ' ')}</Badge>
+                  {viewJob.experienceLevel && <Badge className={getExperienceColor(viewJob.experienceLevel)}>{viewJob.experienceLevel.replace('_', ' ')}</Badge>}
                 </div>
                 {user?.role === 'student' && (
                   <Button

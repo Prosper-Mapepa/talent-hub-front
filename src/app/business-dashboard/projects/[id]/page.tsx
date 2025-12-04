@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,13 +12,14 @@ import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import { ArrowLeft, Calendar, CheckCircle, Clock, Download, FileText, MessageSquare, Star, Upload } from "lucide-react"
 
-export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
+export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const [feedback, setFeedback] = useState("")
   const [activeTab, setActiveTab] = useState("overview")
+  const resolvedParams = use(params);
 
   // Mock project data
   const project = {
-    id: params.id,
+    id: resolvedParams.id,
     title: "Logo Design for Marketing Campaign",
     description:
       "Create a modern, eye-catching logo for our upcoming marketing campaign. The logo should reflect our brand values of innovation, reliability, and customer focus.",
