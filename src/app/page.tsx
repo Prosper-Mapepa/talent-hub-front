@@ -1,11 +1,10 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowRight, Briefcase, MessageSquare, Star, Users,CheckCircle, Award } from "lucide-react"
+import { ArrowRight, Briefcase, MessageSquare, Star, Users, ShieldCheck } from "lucide-react"
 import { FadeIn } from "@/components/animations/fade-in"
-import { BsStarFill } from "react-icons/bs";
 import Banner from '../assets/banner.png'
-import Brand from "../assets/landdd.webp"
+import { HeroTalentFlow } from '@/components/hero-talent-flow'
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { useAppSelector } from '@/lib/hooks';
@@ -38,30 +37,43 @@ const getFileUrl = (filePath: string) => {
   return fullUrl;
 };
 
-function TotalSkillsCounter() {
-const [totalSkills, setTotalSkills] = useState<number>(0);
+function TotalTalentsCounter() {
+  const [totalTalents, setTotalTalents] = useState<number>(0);
   useEffect(() => {
-    apiClient.get('/students')
-      .then(res => {
-        const students = res.data.data || [];
-        const count = students.reduce(
-          (sum: number, student: any) => sum + (student.skills?.length || 0),
-          0
-        );
-        setTotalSkills(count);
+    apiClient
+      .get('/students/talents/all')
+      .then((res) => {
+        const list = res.data?.data ?? res.data ?? [];
+        setTotalTalents(Array.isArray(list) ? list.length : 0);
       })
-      .catch(() => setTotalSkills(0));
+      .catch(() => setTotalTalents(0));
   }, []);
-  return (
-    <motion.span
-      initial={{ scale: 0.8 }}
-      animate={{ scale: [0.6, 0.8,0.8, 0.8] }}
-      transition={{ repeat: Infinity, duration: 2, repeatType: 'reverse' }}
-      className="  font-extrabold text-[#FFC540] ml-4"
-    >
-      {totalSkills.toLocaleString()}+ Talents
-    </motion.span>
 
+  const displayCount = totalTalents > 0 ? totalTalents : 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="vt-talent-stat inline-flex items-center gap-3 rounded-xl border bg-white/[0.08] px-3.5 py-2 backdrop-blur-sm"
+    >
+      <motion.span
+        key={displayCount}
+        initial={{ scale: 0.92, opacity: 0.8 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+        className="vt-gold-badge flex min-w-[3rem] items-center justify-center rounded-lg px-2.5 py-1.5 text-2xl font-black tabular-nums leading-none sm:min-w-[3.25rem] sm:text-3xl"
+      >
+        {displayCount.toLocaleString()}+
+      </motion.span>
+      <span className="flex flex-col leading-tight">
+        <span className="text-sm font-semibold uppercase tracking-widest text-white sm:text-base">
+          Talents
+        </span>
+        <span className="text-xs text-white/60">live on VeriTalent</span>
+      </span>
+    </motion.div>
   );
 }
 
@@ -183,154 +195,140 @@ export default function Home() {
   return (
     <div className="flex flex-col ">
       {/* Hero Section */}
-      <section className="gradient-bg py-20 text-white bg-gradient-to-br from-[#8F1A27] via-[#6A0032] to-[#8F1A27]">
-        <div className=" px-4 md:px-6">
-          <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
-            <div className="flex flex-col justify-center space-y-4">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl">
-                   Discover Student <span className="gradient-text text-[#FEC72D]">Talent</span> at CMU
+      <section className="vt-hero relative overflow-hidden text-white">
+        <div className="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-[color:var(--vt-teal-600)]/15 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[color:var(--vt-purple-600)]/20 blur-3xl" />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-16 md:px-6 lg:py-24">
+          <div className="grid items-stretch gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+            <div className="flex flex-col justify-center space-y-8 py-2">
+              {/* <FadeIn direction="up" duration={0.6}>
+                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white/90 backdrop-blur-sm">
+                  <ShieldCheck className="h-4 w-4 text-[color:var(--vt-teal-600)]" />
+                  Trusted student talent marketplace
+                </span>
+              </FadeIn> */}
+
+              <div className="space-y-5">
+                <h1 className="vt-hero-headline text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl xl:text-6xl">
+                  <span className="vt-hero-headline-light">Discover </span>
+                  <span className="vt-hero-gold">Verified Talent</span>
+                  <span className="vt-hero-headline-light">  In Minutes</span>
                 </h1>
-                <p className="max-w-[600px] text-white/80 md:text-xl py-5">
-                
-                  Unlock a world of Networking: connect, collaborate, and grow with the brightest student minds at CMU. Showcase your unique skills, build your portfolio, and expand your network with meaningful connections.
+                <p className="max-w-xl text-base text-white/80 sm:text-lg md:text-xl">
+                  VeriTalent connects students and businesses through trusted profiles, clear pricing, and fast communication.
+                  Find the right person for the job—without the noise.
                 </p>
               </div>
-              {/* Animated Floating Avatars and Talent Counter */}
-              <motion.div
-                className="flex gap-2 mt-6 items-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.8 }}
-              >
-                {[profileImg, userImg, userWebp, logoImg].map((src, i) => (
-                  <motion.div
-                    key={i}
-                    className="rounded-full border-2 border-white shadow-lg bg-white"
-                    initial={{ y: 0 }}
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ repeat: Infinity, duration: 2 + i * 0.2, delay: i * 0.2 }}
+
+              <div className="flex flex-wrap gap-2">
+                {["Verified profiles", "Clear pricing", "Direct messaging"].map((label) => (
+                  <span
+                    key={label}
+                    className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-white/90 sm:text-sm"
                   >
-                    <Image src={src} alt={`Talent ${i + 1}`} width={48} height={48} />
-                  </motion.div>
+                    {label}
+                  </span>
                 ))}
-                <span className="ml-4 text-lg font-bold text-[#FFC540] flex items-center">
-                  <TotalSkillsCounter />
-                </span>
-              </motion.div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
+              </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link href="/services">
-                  <Button size="lg" className="bg-[#6A0032] text-white border hover:bg-orange-500">
+                  <Button size="lg" className="w-full bg-[color:var(--vt-teal-600)] text-white hover:bg-[color:var(--vt-teal-600)]/90 sm:w-auto">
                     Explore Talents
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
                 <Link href="/register">
-                  <Button size="lg" variant="outline" className="text-[#6A0032]">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full border-white/30 bg-transparent text-white hover:bg-white/10 sm:w-auto"
+                  >
                     Start Networking
                   </Button>
                 </Link>
               </div>
 
-              <FadeIn direction="up" delay={0.5} duration={0.7}>
-                <div className="mt-4 flex items-center gap-2">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="inline-block h-8 w-8 overflow-hidden rounded-full border-2 border-white ">
-                        <BsStarFill size={20} className="text-[#FFC72C] "/>
-                      </div>
+              <div className="flex flex-col gap-4 border-t border-white/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
+                <motion.div
+                  className="flex flex-wrap items-center gap-4"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.7 }}
+                >
+                  {/* <div className="flex -space-x-2">
+                    {[profileImg, userImg, userWebp, logoImg].map((src, i) => (
+                      <motion.div
+                        key={i}
+                        className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-[color:var(--vt-teal-600)] bg-white shadow-md ring-2 ring-white/20"
+                        initial={{ y: 0 }}
+                        animate={{ y: [0, -5, 0] }}
+                        transition={{ repeat: Infinity, duration: 2.2 + i * 0.15, delay: i * 0.15 }}
+                      >
+                        <Image src={src} alt={`Student ${i + 1}`} fill className="object-cover" sizes="40px" />
+                      </motion.div>
+                    ))}
+                  </div> */}
+                  <TotalTalentsCounter />
+                </motion.div>
+
+                <div className="flex items-center gap-2 text-sm text-white/90">
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Star key={i} className="h-4 w-4 fill-[color:var(--vt-teal-600)] text-[color:var(--vt-teal-600)]" />
                     ))}
                   </div>
-                  <div className="flex items-center text-sm text-white">
-                    <Star className="mr-1 h-4 w-4 fill-cmu-gold text-cmu-gold" />
-                    <span className="font-medium text-[#FFC72C]">4.9</span>
-                    <span className="ml-1">(1.2k+ reviews)</span>
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-            <div className="flex items-center justify-center">
-            <FadeIn direction="right" duration={0.8}>
-              <div className="relative flex items-center justify-center">
-                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-lg bg-cmu-gold/30 blur-2xl" />
-                <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-lg bg-cmu-maroon/30 blur-2xl" />
-                <div className="relative overflow-hidden rounded-xl border bg-card shadow-xl">
-                  <Image
-                    alt="CMU Students collaborating"
-                    className="aspect-video w-full object-cover object-center"
-                    height="550"
-                    src={Brand}
-                    width="750"
-                  />
-                  {/* <motion.div
-                    initial={{ width: "0%" }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: 1.5, delay: 0.5, ease: "easeInOut" }}
-                    className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-cmu-maroon via-cmu-light to-cmu-gold"
-                  /> */}
-                </div>
-
-                <div className="absolute -bottom-5 -left-5 rounded-lg bg-white p-4 shadow-lg dark:bg-slate-900 sm:left-5">
-                  <div className="flex items-center gap-2">
-                    <div className="rounded-full bg-green-100 p-2 dark:bg-green-900">
-                      <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" /> 
-                    </div>
-                    <span className="text-sm font-medium text-green-600">Verified Students</span>
-                  </div>
-                </div>
-
-                <div className="absolute -right-5 -top-5 rounded-lg bg-white p-4 shadow-lg dark:bg-slate-900 sm:right-5">
-                  <div className="flex items-center gap-2">
-                    <div className="rounded-full bg-amber-100 p-2 dark:bg-amber-900">
-                      <Award className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                    </div>
-                    <span className="text-sm font-medium text-amber-600">Top CMU Talent</span>
-                  </div>
+                  <span className="font-semibold text-white">4.9</span>
+                  <span className="text-white/70">(1.2k+ reviews)</span>
                 </div>
               </div>
-            </FadeIn>
             </div>
+
+            <FadeIn direction="right" duration={0.8} className="flex h-full min-h-[32rem] w-full lg:min-h-0">
+              <HeroTalentFlow />
+            </FadeIn>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-gradient-to-b from-white to-[#FFF7ED] mt-5">
+      <section className="py-16 bg-gradient-to-b from-white to-[color:var(--vt-mint-50)] mt-5">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-[#8F1A27] mb-2">
-            Why Join CMU Talent Hub?
+          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-foreground mb-2">
+            Why VeriTalent?
           </h2>
-          <div className="mx-auto h-1 w-24 bg-[#FFC540] rounded mb-8"></div>
+          <div className="mx-auto h-1 w-24 bg-primary rounded mb-8"></div>
           <p className="text-center text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
-          Your network is your net worth, build meaningful connections that open doors to opportunities, mentorship, and lasting growth
+            Your network is your net worth—build meaningful connections that open doors to opportunities and lasting growth.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8 transition-transform hover:-translate-y-2 hover:shadow-2xl group">
-              <Users className="h-14 w-14 text-[#8F1A27] mb-4 group-hover:text-[#FFC540] transition-colors" />
-              <h3 className="text-xl font-bold mb-2 text-center">Showcase Your Talent</h3>
+              <Users className="h-14 w-14 text-primary mb-4 group-hover:text-[color:var(--vt-purple-600)] transition-colors" />
+              <h3 className="text-xl font-bold mb-2 text-center">Showcase your talent</h3>
               <p className="text-center text-gray-500">
-                Build a stunning profile and portfolio to highlight your unique Talents and Achievements.
+                Build a strong profile and portfolio that makes you instantly discoverable.
               </p>
             </div>
             <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8 transition-transform hover:-translate-y-2 hover:shadow-2xl group">
-              <Briefcase className="h-14 w-14 text-[#8F1A27] mb-4 group-hover:text-[#FFC540] transition-colors" />
-              <h3 className="text-xl font-bold mb-2 text-center">Network &amp; Collaborate</h3>
+              <Briefcase className="h-14 w-14 text-primary mb-4 group-hover:text-[color:var(--vt-purple-600)] transition-colors" />
+              <h3 className="text-xl font-bold mb-2 text-center">Work with confidence</h3>
               <p className="text-center text-gray-500">
-                Connect with peers, join projects, and grow your network for future opportunities.
+                Clear expectations, real profiles, and a smoother hiring experience.
               </p>
             </div>
             <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8 transition-transform hover:-translate-y-2 hover:shadow-2xl group">
-              <MessageSquare className="h-14 w-14 text-[#8F1A27] mb-4 group-hover:text-[#FFC540] transition-colors" />
-              <h3 className="text-xl font-bold mb-2 text-center">Get Discovered</h3>
+              <MessageSquare className="h-14 w-14 text-primary mb-4 group-hover:text-[color:var(--vt-purple-600)] transition-colors" />
+              <h3 className="text-xl font-bold mb-2 text-center">Fast communication</h3>
               <p className="text-center text-gray-500">
-                Be visible to other students, campus resources, and unlock academic and career opportunities.
+                Message securely and keep projects moving with less friction.
               </p>
             </div>
             <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8 transition-transform hover:-translate-y-2 hover:shadow-2xl group">
-              <Star className="h-14 w-14 text-[#8F1A27] mb-4 group-hover:text-[#FFC540] transition-colors" />
-              <h3 className="text-xl font-bold mb-2 text-center">Grow Your Network</h3>
+              <Star className="h-14 w-14 text-primary mb-4 group-hover:text-[color:var(--vt-purple-600)] transition-colors" />
+              <h3 className="text-xl font-bold mb-2 text-center">Build reputation</h3>
               <p className="text-center text-gray-500">
-                Gain experience, earn recognition, and unlock new opportunities for your future career.
+                Reviews, verification, and repeat work—designed for long-term growth.
               </p>
             </div>
           </div>
@@ -339,13 +337,13 @@ export default function Home() {
 
       {/* Featured Talents (formerly Featured Services) */}
       {user && talents.length > 0 && (
-        <section className="bg-[#FFF7ED] py-12 dark:bg-slate-900 md:py-24">
+        <section className="bg-[color:var(--vt-mint-50)] py-12 dark:bg-slate-900 md:py-24">
           <div className="px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-[#6A0032]">Featured Talents</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-foreground">Featured Talents</h2>
                 <p className="max-w-[900px] text-slate-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-slate-400">
-                  Discover top talents offered by CMU students.
+                  Discover top talent across popular categories.
                 </p>
               </div>
             </div>
@@ -529,7 +527,7 @@ export default function Home() {
                       {/* Content Section */}
                       <div className="p-4 flex-1 flex flex-col">
                         <div className="mb-3">
-                          <CardTitle className="text-lg font-bold text-[#6A0032] mb-2">{talent.title}</CardTitle>
+                          <CardTitle className="text-lg font-bold text-foreground mb-2">{talent.title}</CardTitle>
                     <Badge className="mb-2" variant="secondary">{talent.category}</Badge>
                         </div>
                         <p className="text-sm text-gray-600 mb-4 flex-1 line-clamp-3">{talent.description}</p>
@@ -545,7 +543,7 @@ export default function Home() {
                               <Button 
                                 size="sm" 
                                 variant="outline" 
-                                className="text-xs px-2 py-1 h-6 bg-[#6A0032] text-white hover:bg-[#8F1A27] border-[#6A0032]"
+                                className="text-xs px-2 py-1 h-6 bg-primary text-primary-foreground hover:bg-primary/90 border-primary"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 View Profile
@@ -725,7 +723,7 @@ export default function Home() {
                       {/* Content Section */}
                       <div className="p-4 flex-1 flex flex-col">
                         <div className="mb-3">
-                          <CardTitle className="text-lg font-bold text-[#6A0032] mb-2">{talent.title}</CardTitle>
+                          <CardTitle className="text-lg font-bold text-foreground mb-2">{talent.title}</CardTitle>
                           <Badge className="mb-2" variant="secondary">{talent.category}</Badge>
                         </div>
                         <p className="text-sm text-gray-600 mb-4 flex-1 line-clamp-3">{talent.description}</p>
@@ -741,7 +739,7 @@ export default function Home() {
                               <Button 
                                 size="sm" 
                                 variant="outline" 
-                                className="text-xs px-2 py-1 h-6 bg-[#6A0032] text-white hover:bg-[#8F1A27] border-[#6A0032]"
+                                className="text-xs px-2 py-1 h-6 bg-primary text-primary-foreground hover:bg-primary/90 border-primary"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 View Profile
@@ -761,19 +759,19 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="py-12 md:py-16 px-10">
-      <div className="gradient-bg py-20 text-white bg-gradient-to-br from-[#8F1A27] via-[#6A0032] to-[#8F1A27] text-center rounded-xl">
+      <div className="vt-hero py-20 text-white text-center rounded-xl">
         <h2 className="mb-4 text-3xl font-bold md:text-4xl ">Ready to Get Started?</h2>
         <p className="mx-auto mb-8 max-w-2xl text-white/80">
-          Join CMUTalentHub today to connect with talented students or offer your Talents to the community.
+          Join VeriTalent today to connect with verified talent or offer your skills to the community.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link href="/register">
-            <Button size="lg" className="bg-white text-[#6A0032] hover:bg-gray-100">
+            <Button size="lg" className="bg-white text-[color:var(--vt-teal-950)] hover:bg-white/90">
               Explore Talents
             </Button>
           </Link>
           <Link href="/services">
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-[#6A0032]/10">
+            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 bg-white/5">
               Start Networking
             </Button>
           </Link>

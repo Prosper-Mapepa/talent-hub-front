@@ -5,25 +5,25 @@ import { CheckCircle, Users, Briefcase, MessageSquare, Star, CreditCard, Shield,
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-gray-50 ">
+    <div className="min-h-screen bg-muted/20">
       {/* Hero Section */}
       <section className="bg-white py-12 px-4 md:px-8 md:py-16">
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6">
-              How <span className="text-[#8F1A27]">CMUTalentHub</span> Works
+              How <span className="text-primary">VeriTalent</span> Works
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
               Connect with talented students, showcase your skills, and grow your professional network all in one place.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/register">
-                <Button size="lg" className="bg-[#8F1A27] text-white hover:bg-[#6D0432] rounded-lg shadow-sm font-medium px-8 py-3">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg shadow-sm font-medium px-8 py-3">
                   Start Networking
                 </Button>
               </Link>
               <Link href="/services">
-                <Button size="lg" variant="outline" className="border-[#8F1A27] text-[#8F1A27] hover:bg-[#8F1A27]/10 rounded-lg font-medium px-8 py-3">
+                <Button size="lg" variant="outline" className="border-border text-foreground hover:bg-accent rounded-lg font-medium px-8 py-3">
                   Explore Talents
                 </Button>
               </Link>
@@ -36,17 +36,17 @@ export default function HowItWorksPage() {
       <section className="py-16 px-4 md:px-8">
         <div className="mx-auto max-w-8xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#8F1A27] mb-4">For Students</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">For Students</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Showcase your skills, build your portfolio, and connect with CMU Community
+              Showcase your skills, build your portfolio, and connect with people who need your work.
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 ">
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader className="pb-4">
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <Users className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <Users className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Create Profile</CardTitle>
               </CardHeader>
@@ -71,10 +71,10 @@ export default function HowItWorksPage() {
               </CardContent>
             </Card>
 
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader className="pb-4">
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <Briefcase className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <Briefcase className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">List Talents</CardTitle>
               </CardHeader>
@@ -99,10 +99,10 @@ export default function HowItWorksPage() {
               </CardContent>
             </Card>
 
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader className="pb-4">
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <MessageSquare className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <MessageSquare className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Manage Network</CardTitle>
               </CardHeader>
@@ -127,10 +127,10 @@ export default function HowItWorksPage() {
               </CardContent>
             </Card>
 
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader className="pb-4">
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <Star className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <Star className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Build Reputation</CardTitle>
               </CardHeader>
@@ -162,17 +162,17 @@ export default function HowItWorksPage() {
       <section className="py-16 px-4 md:px-8 bg-white">
         <div className="mx-auto max-w-8xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#8F1A27] mb-4">For Faculty and Staff</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">For Businesses</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Find talented students to help with your projects, events, and business needs.
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader className="pb-4">
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <Users className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <Users className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Browse Talents</CardTitle>
               </CardHeader>
@@ -197,10 +197,10 @@ export default function HowItWorksPage() {
               </CardContent>
             </Card>
 
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader className="pb-4">
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <Briefcase className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <Briefcase className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Post Jobs</CardTitle>
               </CardHeader>
@@ -225,10 +225,10 @@ export default function HowItWorksPage() {
               </CardContent>
             </Card>
 
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader className="pb-4">
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <CreditCard className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <CreditCard className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Connect = Network </CardTitle>
               </CardHeader>
@@ -253,10 +253,10 @@ export default function HowItWorksPage() {
               </CardContent>
             </Card>
 
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader className="pb-4">
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <Shield className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <Shield className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Quality Assurance</CardTitle>
               </CardHeader>
@@ -288,17 +288,17 @@ export default function HowItWorksPage() {
       <section className="py-16 px-4 md:px-8">
         <div className="mx-auto max-w-8xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#8F1A27] mb-4">Trust & Safety</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">Trust & Safety</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               We prioritize creating a safe and trusted environment for all users
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader>
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <Shield className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <Shield className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Verified Profiles</CardTitle>
                 <CardDescription className="text-gray-600">
@@ -313,10 +313,10 @@ export default function HowItWorksPage() {
               </CardContent>
             </Card>
 
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader>
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <CreditCard className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <CreditCard className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Secure Messaging</CardTitle>
                 <CardDescription className="text-gray-600">
@@ -330,10 +330,10 @@ export default function HowItWorksPage() {
               </CardContent>
             </Card>
 
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow">
+            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
               <CardHeader>
-                <div className="bg-[#8F1A27]/10 rounded-full p-3 w-fit mb-4">
-                  <Award className="h-6 w-6 text-[#8F1A27]" />
+                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
+                  <Award className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-lg font-bold text-gray-900">Quality Standards</CardTitle>
                 <CardDescription className="text-gray-600">
@@ -352,20 +352,20 @@ export default function HowItWorksPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="radient-bg py-20 text-white bg-gradient-to-br from-[#8F1A27] via-[#6A0032] to-[#8F1A27] text-center ">
+      <section className="vt-hero py-20 text-white text-center ">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">Ready to Get Started?</h2>
           <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-            Join CMUTalentHub today to connect with talented students or offer your skills to the campus community.
+            Join VeriTalent today to connect with verified talent or offer your skills to the community.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/register">
-              <Button size="lg" className="bg-white text-[#8F1A27] hover:bg-gray-100 rounded-lg font-medium px-8 py-3">
+              <Button size="lg" className="bg-white text-[color:var(--vt-teal-950)] hover:bg-white/90 rounded-lg font-medium px-8 py-3">
                 Start Networking
               </Button>
             </Link>
             <Link href="/services">
-              <Button size="lg" variant="outline" className="border-white bg-[#6A0032]/10 text-white hover:bg-white/10 rounded-lg font-medium px-8 py-3">
+              <Button size="lg" variant="outline" className="border-white/30 bg-white/5 text-white hover:bg-white/10 rounded-lg font-medium px-8 py-3">
                 Explore Talents
               </Button>
             </Link>

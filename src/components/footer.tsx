@@ -7,14 +7,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold text-[#6A0032]">CMUTalentHub</span>
+              <span className="text-xl font-bold text-primary">VeriTalent</span>
             </Link>
             <p className="text-sm text-muted-foreground">
-            Unlock a Campus Networking - Connect, Collaborate, and Grow with the brightest student minds at CMU. 
+            Connect, collaborate, and grow with verified student talent.
             </p>
           </div>
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-[#6A0032]">Platform</h3>
+            <h3 className="text-sm font-medium text-foreground">Platform</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/services" className="text-muted-foreground transition-colors hover:text-foreground">
@@ -39,7 +39,7 @@ export default function Footer() {
             </ul>
           </div>
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-[#6A0032]">Resources</h3>
+            <h3 className="text-sm font-medium text-foreground">Resources</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/help" className="text-muted-foreground transition-colors hover:text-foreground">
@@ -64,7 +64,7 @@ export default function Footer() {
             </ul>
           </div>
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-[#6A0032]">Legal</h3>
+            <h3 className="text-sm font-medium text-foreground">Legal</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/terms" className="text-muted-foreground transition-colors hover:text-foreground">
@@ -90,7 +90,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} CMUTalentHub. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} VeriTalent. All rights reserved.</p>
         </div>
       </div>
     </footer>

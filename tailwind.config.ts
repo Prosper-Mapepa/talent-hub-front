@@ -20,13 +20,14 @@ const config = {
     },
     extend: {
       colors: {
-        cmu: {
-          maroon: "#6A0032",
-          light: "#8C1D54",
-          dark: "#4A0022",
-          gold: "#FFC72C",
+        veritalent: {
+          teal950: "#04342C",
+          teal700: "#0F6E56",
+          teal600: "#1D9E75",
+          mint50: "#E1F5EE",
+          purple600: "#534AB7",
         },
-        brand: "#6A0032",
+        brand: "#0F6E56",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

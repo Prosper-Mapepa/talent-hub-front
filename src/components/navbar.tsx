@@ -105,38 +105,110 @@ export function Navbar() {
   const displayLastName = user?.lastName || student?.lastName || '';
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/90  backdrop-blur shadow ">
+    <header className="sticky top-0 z-50 w-full bg-background/90 backdrop-blur shadow-sm border-b">
       <div className="flex h-16 items-center justify-between w-full px-4 md:px-8">
         <div className="flex items-center mr-6">
-          <Link href="/" className="flex items-center space-x-2">
-            <Image src={Logo} alt="Logo" width={45} height={45} className="rounded-full shadow-lg" />
-            <span className="hidden md:inline-block font-extrabold text-2xl tracking-tight text-[#8F1A27]">CMU Talent<span className="text-[#FFC540]">Hub</span></span>
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3">
+            <Image
+              src={Logo}
+              alt="VeriTalent logo"
+              width={64}
+              height={64}
+              className="h-12 w-12 shrink-0 rounded-full object-cover shadow-md ring-0 ring-primary/15 md:h-14 md:w-14"
+              priority
+            />
+            <span className="hidden md:inline-block font-extrabold text-2xl tracking-tight text-foreground">
+              Veri<span className="text-primary">Talent</span>
+            </span>
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <nav className="flex flex-wrap items-center gap-4 md:gap-6 text-sm font-medium">
-            <Link href="/" className={clientPathname === '/' ? 'font-bold text-[#8F1A27] underline underline-offset-4' : 'transition-colors hover:text-[#8F1A27] text-gray-500'}>Home</Link>
+            <Link
+              href="/"
+              className={
+                clientPathname === "/"
+                  ? "font-semibold text-primary underline underline-offset-4"
+                  : "transition-colors hover:text-primary text-muted-foreground"
+              }
+            >
+              Home
+            </Link>
             {user && clientPathname && (
-              <Link href={dashboardLink} className={clientPathname === '/dashboard' || clientPathname === '/business-dashboard' ? 'font-bold text-[#8F1A27] underline underline-offset-4' : 'transition-colors hover:text-[#8F1A27] text-gray-500'}>Dashboard</Link>
+              <Link
+                href={dashboardLink}
+                className={
+                  clientPathname === "/dashboard" || clientPathname === "/business-dashboard"
+                    ? "font-semibold text-primary underline underline-offset-4"
+                    : "transition-colors hover:text-primary text-muted-foreground"
+                }
+              >
+                Dashboard
+              </Link>
             )}
             {isAuthenticated && (
               <>
-                <Link href="/students" className={clientPathname === '/students' ? 'font-bold text-[#8F1A27] underline underline-offset-4' : 'transition-colors hover:text-[#8F1A27] text-gray-500'}>Students</Link>
+                <Link
+                  href="/students"
+                  className={
+                    clientPathname === "/students"
+                      ? "font-semibold text-primary underline underline-offset-4"
+                      : "transition-colors hover:text-primary text-muted-foreground"
+                  }
+                >
+                  Students
+                </Link>
                 {user && (
-                  <Link href="/services" className={clientPathname.startsWith('/services') ? 'font-bold text-[#8F1A27] underline underline-offset-4' : 'transition-colors hover:text-[#8F1A27] text-gray-500'}>Talents</Link>
+                  <Link
+                    href="/services"
+                    className={
+                      clientPathname.startsWith("/services")
+                        ? "font-semibold text-primary underline underline-offset-4"
+                        : "transition-colors hover:text-primary text-muted-foreground"
+                    }
+                  >
+                    Talents
+                  </Link>
                 )}
-                                <Link href="/jobs" className={clientPathname === '/jobs' ? 'font-bold text-[#8F1A27] underline underline-offset-4' : 'transition-colors hover:text-[#8F1A27] text-gray-500'}>Campus Jobs</Link>
+                <Link
+                  href="/jobs"
+                  className={
+                    clientPathname === "/jobs"
+                      ? "font-semibold text-primary underline underline-offset-4"
+                      : "transition-colors hover:text-primary text-muted-foreground"
+                  }
+                >
+                  Campus Jobs
+                </Link>
               </>
             )}
-            <Link href="/how-it-works" className={clientPathname === '/how-it-works' ? 'font-bold text-[#8F1A27] underline underline-offset-4' : 'transition-colors hover:text-[#8F1A27] text-gray-500'}>How It Works</Link>
-            <Link href="/products" className={clientPathname === '/products' ? 'font-bold text-[#8F1A27] underline underline-offset-4' : 'transition-colors hover:text-[#8F1A27] text-gray-500'}>Products</Link>
+            <Link
+              href="/how-it-works"
+              className={
+                clientPathname === "/how-it-works"
+                  ? "font-semibold text-primary underline underline-offset-4"
+                  : "transition-colors hover:text-primary text-muted-foreground"
+              }
+            >
+              How It Works
+            </Link>
+            <Link
+              href="/products"
+              className={
+                clientPathname === "/products"
+                  ? "font-semibold text-primary underline underline-offset-4"
+                  : "transition-colors hover:text-primary text-muted-foreground"
+              }
+            >
+              Products
+            </Link>
             
           </nav>
           <div className="flex items-center space-x-2">
             <ModeToggle />
             {isAuthenticated && user ? (
               <div className="flex items-center space-x-2">
-                <Link href="/messages" className="relative p-2 text-gray-500 hover:text-[#8F1A27] transition-colors">
+                <Link href="/messages" className="relative p-2 text-muted-foreground hover:text-primary transition-colors">
                   <MessageSquare className="h-5 w-5" />
                   {hasUnreadMessages && (
                     <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full animate-pulse"></span>
@@ -186,10 +258,10 @@ export function Navbar() {
               </div>
             ) : (
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" asChild className="text-[#8F1A27] font-bold">
+                <Button variant="ghost" asChild className="text-primary font-semibold">
                   <Link href="/login">Sign In</Link>
                 </Button>
-                <Button asChild className="bg-[#8F1A27] text-white hover:bg-[#8F1A27]/90 rounded-lg shadow font-bold">
+                <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg shadow-sm font-semibold">
                   <Link href="/register">Sign Up</Link>
                 </Button>
               </div>

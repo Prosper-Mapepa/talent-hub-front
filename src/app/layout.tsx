@@ -10,10 +10,10 @@ import { Providers } from "@/components/providers"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Student Talent Hub - Connect Students with Opportunities",
-  description: "A platform connecting talented students with businesses for internships, jobs, and projects.",
-  keywords: "student talent, internships, jobs, projects, business opportunities",
-  authors: [{ name: 'Student Talent Hub Team' }],
+  title: "VeriTalent",
+  description: "Connect with verified student talent for internships, jobs, and projects.",
+  keywords: "verified talent, student talent, internships, jobs, projects, business opportunities",
+  authors: [{ name: "VeriTalent Team" }],
 }
 
 export const viewport: Viewport = {
