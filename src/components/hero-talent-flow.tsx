@@ -183,7 +183,7 @@ export function HeroTalentFlow() {
   const columnDurations = [38, 44, 40];
 
   return (
-    <div className="relative flex h-full min-h-[32rem] w-full max-w-xl lg:max-w-none">
+    <div className="relative flex h-full min-h-[18rem] w-full max-w-xl sm:min-h-[24rem] md:min-h-[28rem] lg:max-w-none lg:min-h-[32rem]">
       <div className="vt-talent-flow-panel relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] shadow-xl ring-1 ring-white/10 backdrop-blur-md">
         <div className="relative z-20 flex shrink-0 items-center justify-between gap-2 border-b border-white/10 px-2.5 py-2 sm:px-3">
           <div className="flex items-center gap-1.5">

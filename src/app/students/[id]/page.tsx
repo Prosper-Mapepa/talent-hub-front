@@ -26,6 +26,7 @@ import EditableSkills from '@/components/EditableSkills';
 import apiClient from '@/lib/apiClient';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ImageSlider from '@/components/ImageSlider';
+import { PageShell } from '@/components/page-shell';
 
 export default function StudentProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -370,7 +371,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
     return (
       <div className="flex justify-center items-center min-h-screen">
         <Toaster position="top-right" />
-        <svg className="animate-spin h-8 w-8 text-[#6A0032]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg className="animate-spin h-8 w-8 text-[var(--vt-teal-700)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
         </svg>
@@ -403,15 +404,13 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
   // Remove the if (isOwner) block and always use the tabbed layout below
 
   return (
-    <div className="min-h-screen bg-[#F7F4F2] transition-colors duration-700 ease-in-out">
-      <div className="px-4 py-8 md:px-10 md:py-10">
+    <PageShell innerClassName="relative">
         <Toaster position="top-right" />
-        {/* Only show Skip to Dashboard button for owner */}
         {canEdit && (
-          <Button className="absolute right-10 top-17" variant="outline" onClick={handleSkip}>Skip to Dashboard</Button>
+          <Button className="vt-btn-outline absolute right-4 top-4 z-10 md:right-8" variant="outline" onClick={handleSkip}>Skip to Dashboard</Button>
         )}
         
-        <div className="grid gap-8 lg:grid-cols-3 mt-1">
+        <div className="grid gap-8 lg:grid-cols-3">
           {/* Student Profile Sidebar */}
           <div className="space-y-6">
             <Card className="bg-white border border-gray-200 shadow-sm rounded-2xl">
@@ -419,7 +418,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                 {/* Update the profile image section in the sidebar */}
                 <div className="flex flex-col items-center text-center">
                   <div className="relative group">
-                    <div className="h-28 w-28 border-4 border-white shadow-lg rounded-full overflow-hidden bg-[#8F1A27] flex items-center justify-center">
+                    <div className="vt-avatar-ring flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-[color:var(--vt-teal-700)] shadow-lg">
                       {student.profileImage ? (
                         <Image
                           src={getFileUrl(student.profileImage)}
@@ -496,7 +495,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                       </DialogHeader>
                       
                       <div className="space-y-4">
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#8F1A27] transition-colors relative">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[var(--vt-teal-700)] transition-colors relative">
                           <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                           <p className="text-sm text-gray-600 mb-2">
                             Click to upload or drag and drop
@@ -515,7 +514,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                         
                         {isUploadingImage && (
                           <div className="flex items-center justify-center py-4">
-                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#8F1A27]"></div>
+                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[var(--vt-teal-700)]"></div>
                             <span className="ml-2 text-sm text-gray-600">Uploading...</span>
                           </div>
                         )}
@@ -533,7 +532,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                     </DialogContent>
                   </Dialog>
                   
-                  <h1 className="mt-6 text-xl font-bold text-[#8F1A27]">{student.firstName} {student.lastName}</h1>
+                  <h1 className="mt-6 text-xl font-bold text-[color:var(--vt-teal-950)]">{student.firstName} {student.lastName}</h1>
                   <div className="mt-3 flex items-center justify-center gap-2">
                     <GraduationCap className="h-5 w-5 text-gray-600" />
                     <span className="text-gray-600 font-medium">
@@ -544,7 +543,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                     <span className="text-gray-500 text-sm">{student.user?.email}</span>
                   </div>
                   <div className="mt-8 grid w-full grid-cols-2 gap-4">
-                    <Button className="bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold" onClick={handleContact}>
+                    <Button className="vt-btn-primary" onClick={handleContact}>
                       <MessageSquare className="mr-2 h-4 w-4" />
                       Contact
                     </Button>
@@ -595,16 +594,16 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
           <div className="lg:col-span-2">
             <Tabs defaultValue={canEdit ? "talents" : "portfolio"} className="space-y-8">
               {/* Update the TabsList to show correct number of tabs */}
-              <TabsList className="inline-flex w-auto bg-gradient-to-r from-gray-50 via-white to-gray-50 border border-gray-200 shadow-lg rounded-xl p-1 backdrop-blur-sm">
+              <TabsList className="vt-tab-list inline-flex w-auto flex-wrap">
                 {canEdit && (
                   <>
-                    <TabsTrigger value="about" className="text-sm font-medium text-gray-600 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8F1A27] data-[state=active]:to-[#6D0432] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg py-2 px-4 data-[state=active]:font-semibold hover:bg-gray-100">About</TabsTrigger>
-                    <TabsTrigger value="skills" className="text-sm font-medium text-gray-600 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8F1A27] data-[state=active]:to-[#6D0432] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg py-2 px-4 data-[state=active]:font-semibold hover:bg-gray-100">Skills</TabsTrigger>
+                    <TabsTrigger value="about" className="vt-tab-trigger">About</TabsTrigger>
+                    <TabsTrigger value="skills" className="vt-tab-trigger">Skills</TabsTrigger>
                   </>
                 )}
-                <TabsTrigger value="portfolio" className="text-sm font-medium text-gray-600 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8F1A27] data-[state=active]:to-[#6D0432] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg py-2 px-4 data-[state=active]:font-semibold hover:bg-gray-100">Portfolio</TabsTrigger>
-                <TabsTrigger value="achievements" className="text-sm font-medium text-gray-600 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8F1A27] data-[state=active]:to-[#6D0432] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg py-2 px-4 data-[state=active]:font-semibold hover:bg-gray-100">Achievements</TabsTrigger>
-                <TabsTrigger value="talents" className="text-sm font-medium text-gray-600 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8F1A27] data-[state=active]:to-[#6D0432] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg py-2 px-4 data-[state=active]:font-semibold hover:bg-gray-100">Talents</TabsTrigger>
+                <TabsTrigger value="portfolio" className="vt-tab-trigger">Portfolio</TabsTrigger>
+                <TabsTrigger value="achievements" className="vt-tab-trigger">Achievements</TabsTrigger>
+                <TabsTrigger value="talents" className="vt-tab-trigger">Talents</TabsTrigger>
               </TabsList>
 
               <TabsContent value="about" className="space-y-6">
@@ -614,15 +613,15 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
-                      <Input name="firstName" value={about.firstName} onChange={handleAboutChange} placeholder="First Name" disabled className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[#8F1A27]/30'} />
-                      <Input name="lastName" value={about.lastName} onChange={handleAboutChange} placeholder="Last Name" disabled className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[#8F1A27]/30'} />
-                      <Input name="major" value={about.major} onChange={handleAboutChange} placeholder="Major" disabled={!canEdit} className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[#8F1A27]/30'} />
-                      <Input name="year" value={about.year} onChange={handleAboutChange} placeholder="Year" disabled={!canEdit} className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[#8F1A27]/30'} />
+                      <Input name="firstName" value={about.firstName} onChange={handleAboutChange} placeholder="First Name" disabled className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[var(--vt-teal-700)]/30'} />
+                      <Input name="lastName" value={about.lastName} onChange={handleAboutChange} placeholder="Last Name" disabled className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[var(--vt-teal-700)]/30'} />
+                      <Input name="major" value={about.major} onChange={handleAboutChange} placeholder="Major" disabled={!canEdit} className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[var(--vt-teal-700)]/30'} />
+                      <Input name="year" value={about.year} onChange={handleAboutChange} placeholder="Year" disabled={!canEdit} className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[var(--vt-teal-700)]/30'} />
                     </div>
-                                          <Textarea name="bio" value={about.bio} onChange={handleAboutChange} placeholder="Tell us about yourself..." rows={4} disabled={!canEdit} className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[#8F1A27]/30'} />
+                                          <Textarea name="bio" value={about.bio} onChange={handleAboutChange} placeholder="Tell us about yourself..." rows={4} disabled={!canEdit} className={!canEdit ? 'text-gray-900 bg-white border-gray-300 opacity-100 cursor-not-allowed' : 'border-gray-200 focus:ring-2 focus:ring-[var(--vt-teal-700)]/30'} />
                     {canEdit && (
                       <div className="flex justify-end mt-6">
-                        <Button onClick={handleSave} disabled={saving} className="bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold">{saving ? 'Saving...' : 'Save Changes'}</Button>
+                        <Button onClick={handleSave} disabled={saving} className="vt-btn-primary">{saving ? 'Saving...' : 'Save Changes'}</Button>
                       </div>
                     )}
                   </CardContent>
@@ -644,7 +643,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                 {/* Projects Section Only */}
                 <Card className="bg-white border border-gray-200 shadow-sm rounded-2xl">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg font-bold text-[#8F1A27] border-b border-gray-200 pb-4">Projects</CardTitle>
+                    <CardTitle className="border-b border-border/40 pb-4 text-lg font-bold text-[color:var(--vt-teal-950)]">Projects</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="grid gap-4 sm:grid-cols-2 mb-4">
@@ -674,8 +673,8 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                               // Clean placeholder for projects without images
                               <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 h-56 flex items-center justify-center overflow-hidden">
                                 {/* Minimal decorative elements */}
-                                <div className="absolute top-4 right-4 w-3 h-3 bg-[#8F1A27]/20 rounded-full" />
-                                <div className="absolute bottom-4 left-4 w-2 h-2 bg-[#8F1A27]/30 rounded-full" />
+                                <div className="absolute top-4 right-4 w-3 h-3 bg-[var(--vt-teal-700)]/20 rounded-full" />
+                                <div className="absolute bottom-4 left-4 w-2 h-2 bg-[var(--vt-teal-700)]/30 rounded-full" />
                                 
                                 <div className="relative text-center z-10">
                                   <div className="w-14 h-14 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -689,7 +688,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                             )}
                             
                             <CardHeader className="p-4">
-                              <CardTitle className="text-lg font-semibold text-gray-900 group-hover:text-[#8F1A27] transition-colors duration-300 flex items-center gap-2">
+                              <CardTitle className="text-lg font-semibold text-gray-900 group-hover:text-[var(--vt-teal-700)] transition-colors duration-300 flex items-center gap-2">
                                 <span>{project.title}</span>
                                 <div className="w-2 h-2 bg-emerald-500 rounded-full" title="Active project" />
                               </CardTitle>
@@ -702,7 +701,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                               <div className="flex items-center justify-end">
                                 <Button 
                                   variant="ghost"
-                                  className="text-[#8F1A27] hover:text-white hover:bg-[#8F1A27] transition-all duration-200 font-medium px-5 py-2 rounded-lg"
+                                  className="text-[var(--vt-teal-700)] hover:text-white hover:bg-[var(--vt-teal-700)] transition-all duration-200 font-medium px-5 py-2 rounded-lg"
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     setSelectedProject(project);
@@ -729,7 +728,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                 {/* Achievements Section */}
                 <Card className="bg-white border border-gray-200 shadow-sm rounded-2xl">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg font-bold text-[#8F1A27] border-b border-gray-200 pb-4">Achievements</CardTitle>
+                    <CardTitle className="border-b border-border/40 pb-4 text-lg font-bold text-[color:var(--vt-teal-950)]">Achievements</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="grid gap-4 sm:grid-cols-2 mb-4">
@@ -757,7 +756,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
               <TabsContent value="talents" className="space-y-6">
                 <Card className="bg-white border border-gray-200 shadow-sm rounded-2xl">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg font-bold text-[#8F1A27] border-b border-gray-200 pb-4">Talents</CardTitle>
+                    <CardTitle className="border-b border-border/40 pb-4 text-lg font-bold text-[color:var(--vt-teal-950)]">Talents</CardTitle>
                   </CardHeader>
                   <CardContent>
                     {(!Array.isArray(talents) || talents.length === 0) && <p className="text-gray-500 text-center py-8">No talents added yet.</p>}
@@ -896,7 +895,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                         <h3 className="font-semibold mb-4 text-gray-900">{editingTalent ? 'Edit Talent' : 'Add Talent'}</h3>
                         <div className="flex flex-col md:flex-row gap-4 mb-4">
                           <Select value={talentForm.title} onValueChange={val => setTalentForm(f => ({ ...f, title: val }))}>
-                            <SelectTrigger className="w-full md:w-1/3 border-gray-200 focus:ring-2 focus:ring-[#8F1A27]/30">
+                            <SelectTrigger className="w-full md:w-1/3 border-gray-200 focus:ring-2 focus:ring-[var(--vt-teal-700)]/30">
                               <SelectValue placeholder="Title" />
                             </SelectTrigger>
                             <SelectContent>
@@ -906,7 +905,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                             </SelectContent>
                           </Select>
                           <Select value={talentForm.category} onValueChange={val => setTalentForm(f => ({ ...f, category: val }))}>
-                            <SelectTrigger className="w-full md:w-1/3 border-gray-200 focus:ring-2 focus:ring-[#8F1A27]/30">
+                            <SelectTrigger className="w-full md:w-1/3 border-gray-200 focus:ring-2 focus:ring-[var(--vt-teal-700)]/30">
                               <SelectValue placeholder="Category" />
                             </SelectTrigger>
                             <SelectContent>
@@ -922,7 +921,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                           onChange={handleTalentChange}
                           placeholder="Description"
                           rows={3}
-                          className="mb-4 border-gray-200 focus:ring-2 focus:ring-[#8F1A27]/30"
+                          className="mb-4 border-gray-200 focus:ring-2 focus:ring-[var(--vt-teal-700)]/30"
                         />
                         
                         {/* File Upload Section */}
@@ -930,7 +929,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                           <label className="block text-sm font-medium text-gray-700 mb-2">
                             Attach Files (Images, Videos, Documents)
                           </label>
-                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-[#8F1A27] transition-colors">
+                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-[var(--vt-teal-700)] transition-colors">
                             <input
                               type="file"
                               multiple
@@ -990,7 +989,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                         <div className="flex gap-3">
                           {editingTalent ? (
                             <>
-                              <Button onClick={handleUpdateTalent} disabled={talentLoading || !talentForm.title || !talentForm.category || !talentForm.description} className="bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold">
+                              <Button onClick={handleUpdateTalent} disabled={talentLoading || !talentForm.title || !talentForm.category || !talentForm.description} className="vt-btn-primary">
                                 {talentLoading ? 'Updating...' : 'Update Talent'}
                               </Button>
                               <Button variant="outline" onClick={() => { setEditingTalent(null); setTalentForm({ title: '', category: '', description: '', files: [] }); setTalentFiles([]); }} className="border-gray-200 text-gray-700 hover:bg-gray-50">
@@ -998,7 +997,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                               </Button>
                             </>
                           ) : (
-                            <Button onClick={handleAddTalent} disabled={talentLoading || !talentForm.title || !talentForm.category || !talentForm.description} className="bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold px-10">
+                            <Button onClick={handleAddTalent} disabled={talentLoading || !talentForm.title || !talentForm.category || !talentForm.description} className="vt-btn-primary px-10">
                               {talentLoading ? 'Adding...' : 'Add Talent'}
                             </Button>
                           )}
@@ -1010,8 +1009,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
               </TabsContent>
             </Tabs>
           </div>
-                </div>
-      </div>
+        </div>
       {/* Project Modal */}
       <Dialog open={showProjectModal} onOpenChange={setShowProjectModal}>
         <DialogContent className="max-w-5xl w-full max-h-[80vh] overflow-y-auto flex flex-col items-center justify-center">
@@ -1265,7 +1263,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                                   href={fileUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-xs text-[#8F1A27] hover:text-[#6D0432] font-medium"
+                                  className="text-xs text-[var(--vt-teal-700)] hover:text-[var(--vt-teal-950)] font-medium"
                                 >
                                   View
                                 </a>
@@ -1294,7 +1292,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                           type="text"
                           value={talentForm.title}
                           onChange={(e) => setTalentForm({ ...talentForm, title: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8F1A27]/30"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--vt-teal-700)]/30"
                         />
                       </div>
                       <div>
@@ -1302,7 +1300,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                         <select
                           value={talentForm.category}
                           onChange={(e) => setTalentForm({ ...talentForm, category: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8F1A27]/30"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--vt-teal-700)]/30"
                         >
                           <option value="">Select Category</option>
                           {talentCategories.map(category => (
@@ -1318,7 +1316,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                         value={talentForm.description}
                         onChange={(e) => setTalentForm({ ...talentForm, description: e.target.value })}
                         rows={4}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8F1A27]/30"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--vt-teal-700)]/30"
                       />
                     </div>
 
@@ -1327,7 +1325,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Add New Files (Images, Videos, Documents)
                       </label>
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-[#8F1A27] transition-colors">
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-[var(--vt-teal-700)] transition-colors">
                         <input
                           type="file"
                           multiple
@@ -1389,7 +1387,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
                       <Button 
                         onClick={handleUpdateTalent}
                         disabled={talentLoading || !talentForm.title || !talentForm.category || !talentForm.description}
-                        className="bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold"
+                        className="vt-btn-primary"
                       >
                         {talentLoading ? 'Updating...' : 'Update Talent'}
                       </Button>
@@ -1413,6 +1411,6 @@ export default function StudentProfilePage({ params }: { params: Promise<{ id: s
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </PageShell>
   );
 }

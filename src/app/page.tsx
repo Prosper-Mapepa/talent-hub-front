@@ -1,10 +1,11 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowRight, Briefcase, MessageSquare, Star, Users, ShieldCheck } from "lucide-react"
+import { ArrowRight, Briefcase, MessageSquare, Star, Users, ShieldCheck, type LucideIcon } from "lucide-react"
 import { FadeIn } from "@/components/animations/fade-in"
 import Banner from '../assets/banner.png'
 import { HeroTalentFlow } from '@/components/hero-talent-flow'
+import { MobileAppShowcase } from '@/components/mobile-app-showcase'
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { useAppSelector } from '@/lib/hooks';
@@ -74,6 +75,49 @@ function TotalTalentsCounter() {
         <span className="text-xs text-white/60">live on VeriTalent</span>
       </span>
     </motion.div>
+  );
+}
+
+const WHY_FEATURES: { icon: LucideIcon; title: string; description: string }[] = [
+  {
+    icon: Users,
+    title: "Showcase your talent",
+    description: "Build a strong profile and portfolio that makes you instantly discoverable.",
+  },
+  {
+    icon: Briefcase,
+    title: "Work with confidence",
+    description: "Clear expectations, real profiles, and a smoother hiring experience.",
+  },
+  {
+    icon: MessageSquare,
+    title: "Fast communication",
+    description: "Message securely and keep projects moving with less friction.",
+  },
+  {
+    icon: Star,
+    title: "Build reputation",
+    description: "Reviews, verification, and repeat work—designed for long-term growth.",
+  },
+];
+
+function WhyFeatureCard({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="flex h-full flex-col gap-3 rounded-xl border border-border/30 bg-white p-6 md:p-7 lg:p-8">
+      <div className="flex items-center gap-3">
+        <Icon className="h-6 w-6 shrink-0 text-[color:var(--vt-teal-700)]" strokeWidth={1.75} />
+        <h3 className="text-lg font-semibold text-foreground md:text-xl">{title}</h3>
+      </div>
+      <p className="text-base leading-relaxed text-muted-foreground">{description}</p>
+    </div>
   );
 }
 
@@ -199,8 +243,8 @@ export default function Home() {
         <div className="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-[color:var(--vt-teal-600)]/15 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[color:var(--vt-purple-600)]/20 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:px-6 lg:py-24">
-          <div className="grid items-stretch gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+        <div className="relative mx-auto max-w-7xl px-4 py-10 sm:py-14 md:px-6 lg:py-24">
+          <div className="grid items-stretch gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
             <div className="flex flex-col justify-center space-y-8 py-2">
               {/* <FadeIn direction="up" duration={0.6}>
                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white/90 backdrop-blur-sm">
@@ -210,7 +254,7 @@ export default function Home() {
               </FadeIn> */}
 
               <div className="space-y-5">
-                <h1 className="vt-hero-headline text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl xl:text-6xl">
+                <h1 className="vt-hero-headline text-[1.75rem] font-extrabold leading-[1.1] tracking-tight min-[400px]:text-4xl sm:text-5xl xl:text-6xl">
                   <span className="vt-hero-headline-light">Discover </span>
                   <span className="vt-hero-gold">Verified Talent</span>
                   <span className="vt-hero-headline-light">  In Minutes</span>
@@ -250,7 +294,7 @@ export default function Home() {
                 </Link>
               </div>
 
-              <div className="flex flex-col gap-4 border-t border-white/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-4 border-t border-white/15 pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                 <motion.div
                   className="flex flex-wrap items-center gap-4"
                   initial={{ opacity: 0, y: 16 }}
@@ -273,7 +317,7 @@ export default function Home() {
                   <TotalTalentsCounter />
                 </motion.div>
 
-                <div className="flex items-center gap-2 text-sm text-white/90">
+                <div className="flex flex-wrap items-center gap-2 text-sm text-white/90">
                   <div className="flex">
                     {[1, 2, 3, 4, 5].map((i) => (
                       <Star key={i} className="h-4 w-4 fill-[color:var(--vt-teal-600)] text-[color:var(--vt-teal-600)]" />
@@ -285,7 +329,7 @@ export default function Home() {
               </div>
             </div>
 
-            <FadeIn direction="right" duration={0.8} className="flex h-full min-h-[32rem] w-full lg:min-h-0">
+            <FadeIn direction="right" duration={0.8} className="flex h-full min-h-[18rem] w-full sm:min-h-[24rem] md:min-h-[28rem] lg:min-h-0">
               <HeroTalentFlow />
             </FadeIn>
           </div>
@@ -293,47 +337,31 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-gradient-to-b from-white to-[color:var(--vt-mint-50)] mt-5">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-foreground mb-2">
-            Why VeriTalent?
-          </h2>
-          <div className="mx-auto h-1 w-24 bg-primary rounded mb-8"></div>
-          <p className="text-center text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
-            Your network is your net worth—build meaningful connections that open doors to opportunities and lasting growth.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8 transition-transform hover:-translate-y-2 hover:shadow-2xl group">
-              <Users className="h-14 w-14 text-primary mb-4 group-hover:text-[color:var(--vt-purple-600)] transition-colors" />
-              <h3 className="text-xl font-bold mb-2 text-center">Showcase your talent</h3>
-              <p className="text-center text-gray-500">
-                Build a strong profile and portfolio that makes you instantly discoverable.
-              </p>
-            </div>
-            <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8 transition-transform hover:-translate-y-2 hover:shadow-2xl group">
-              <Briefcase className="h-14 w-14 text-primary mb-4 group-hover:text-[color:var(--vt-purple-600)] transition-colors" />
-              <h3 className="text-xl font-bold mb-2 text-center">Work with confidence</h3>
-              <p className="text-center text-gray-500">
-                Clear expectations, real profiles, and a smoother hiring experience.
-              </p>
-            </div>
-            <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8 transition-transform hover:-translate-y-2 hover:shadow-2xl group">
-              <MessageSquare className="h-14 w-14 text-primary mb-4 group-hover:text-[color:var(--vt-purple-600)] transition-colors" />
-              <h3 className="text-xl font-bold mb-2 text-center">Fast communication</h3>
-              <p className="text-center text-gray-500">
-                Message securely and keep projects moving with less friction.
-              </p>
-            </div>
-            <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8 transition-transform hover:-translate-y-2 hover:shadow-2xl group">
-              <Star className="h-14 w-14 text-primary mb-4 group-hover:text-[color:var(--vt-purple-600)] transition-colors" />
-              <h3 className="text-xl font-bold mb-2 text-center">Build reputation</h3>
-              <p className="text-center text-gray-500">
-                Reviews, verification, and repeat work—designed for long-term growth.
-              </p>
-            </div>
+      <section className="w-full bg-[color:var(--vt-mint-50)]/40 py-14 md:py-20">
+        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
+          <div className="mb-10 md:mb-12">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
+              Why VeriTalent?
+            </h2>
+            <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              Build meaningful connections that open doors to opportunities and lasting growth.
+            </p>
+          </div>
+
+          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+            {WHY_FEATURES.map((feature) => (
+              <WhyFeatureCard
+                key={feature.title}
+                icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+              />
+            ))}
           </div>
         </div>
       </section>
+
+      <MobileAppShowcase />
 
       {/* Featured Talents (formerly Featured Services) */}
       {user && talents.length > 0 && (
@@ -758,20 +786,20 @@ export default function Home() {
       )}
 
       {/* CTA Section */}
-      <section className="py-12 md:py-16 px-10">
-      <div className="vt-hero py-20 text-white text-center rounded-xl">
+      <section className="px-4 py-10 sm:px-6 sm:py-12 md:px-8 md:py-16">
+      <div className="vt-hero rounded-xl px-4 py-12 text-center text-white sm:px-6 sm:py-16 md:py-20">
         <h2 className="mb-4 text-3xl font-bold md:text-4xl ">Ready to Get Started?</h2>
         <p className="mx-auto mb-8 max-w-2xl text-white/80">
           Join VeriTalent today to connect with verified talent or offer your skills to the community.
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
           <Link href="/register">
-            <Button size="lg" className="bg-white text-[color:var(--vt-teal-950)] hover:bg-white/90">
+            <Button size="lg" className="w-full bg-white text-[color:var(--vt-teal-950)] hover:bg-white/90 sm:w-auto">
               Explore Talents
             </Button>
           </Link>
-          <Link href="/services">
-            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 bg-white/5">
+          <Link href="/services" className="w-full sm:w-auto">
+            <Button size="lg" variant="outline" className="w-full border-white/30 bg-white/5 text-white hover:bg-white/10 sm:w-auto">
               Start Networking
             </Button>
           </Link>

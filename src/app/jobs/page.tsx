@@ -14,6 +14,7 @@ import Link from "next/link"
 import { toast } from 'sonner'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
+import { PageShell, PageHeader } from '@/components/page-shell';
 
 export default function JobsPage() {
   const dispatch = useAppDispatch()
@@ -124,34 +125,29 @@ console.log('Sample job createdAt:', filteredJobs[0]?.createdAt);
 console.log('Sample job data:', filteredJobs[0]);
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] transition-colors duration-700 ease-in-out">
-      <div className=" mx-auto px-10 py-10">
-        {/* Header */}
-        <div className="mb-8">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-[#8F1A27] mb-2">Discover Campus Jobs</h1>
-          </div>
-          <p className="text-lg text-gray-600">
-          Discover campus jobs to gain real-world experience right on spot.
-          </p>
-        </div>
+    <PageShell>
+      <PageHeader
+        badge="Opportunities"
+        title="Discover Campus Jobs"
+        subtitle="Find on-campus roles and internships to build real-world experience."
+      />
 
         {/* Search and Filters */}
         <div className="mb-8 space-y-4">
-          <div className="bg-white rounded-2xl shadow p-6 flex flex-col md:flex-row gap-4 items-center">
+          <div className="vt-search-panel flex flex-col items-center gap-4 md:flex-row">
             <div className="relative flex-1 w-full">
               <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <Input
                 placeholder="Search jobs, companies, or keywords..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 py-3 rounded-lg border-gray-200 focus:ring-2 focus:ring-[#8F1A27]/30"
+                className="pl-10 py-3 rounded-lg border-gray-200 focus:ring-2 focus:ring-[var(--vt-teal-700)]/30"
               />
             </div>
             <Button
               variant="outline"
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 border-gray-200 px-6 py-3 rounded-lg font-semibold text-[#8F1A27] hover:bg-[#8F1A27]/10"
+              className="vt-btn-outline flex items-center gap-2 px-6 py-3"
             >
               <Filter className="h-5 w-5" />
               Filters
@@ -165,7 +161,7 @@ console.log('Sample job data:', filteredJobs[0]);
           </div>
 
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6 mt-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div className="vt-section-card mt-4 grid grid-cols-1 gap-4 p-6 md:grid-cols-3">
               <div>
                 <label className="text-sm font-medium mb-2 block">Job Type</label>
                 <Select value={selectedJobType} onValueChange={setSelectedJobType}>
@@ -234,82 +230,74 @@ console.log('Sample job data:', filteredJobs[0]);
         ) : filteredJobs.length === 0 ? (
           <div className="text-center text-gray-500 py-12">No jobs found.</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="vt-grid-cards-wide">
             {filteredJobs.map((job) => (
-              <Card key={job.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col">
-                <div className="flex items-center gap-3 ">
-                  <div className="bg-[#8F1A27]/10 rounded-full p-3">
-                    <Briefcase className="h-6 w-6 text-[#8F1A27]" />
+              <article key={job.id} className="vt-section-card vt-card-hover flex h-full flex-col overflow-hidden">
+                <div className="flex items-start gap-3 border-b border-border/50 bg-[color:var(--vt-mint-50)]/40 px-4 py-3.5 sm:px-5">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white ring-1 ring-[color:var(--vt-teal-600)]/10">
+                    <Briefcase className="h-5 w-5 text-[color:var(--vt-teal-700)]" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-lg text-gray-900 mb-1">{job.title}</h3>
-                    <div className="flex items-center gap-1 text-sm text-gray-600">
-                      <Building className="h-4 w-4" />
-                      {job.business?.businessName}
-                    </div>
-                  </div>
-                </div>
-                
-                <p className="text-gray-600 text-base line-clamp-3">
-                  {job.description}
-                </p>
-                
-                <div className="flex gap-2 mb-1">
-                  <Badge className={getJobTypeColor(job.type)}>
-                    {job.type.replace("_", " ")}
-                  </Badge>
-                  <Badge className={getExperienceColor(job.experienceLevel)}>
-                    {job.experienceLevel.replace("_", " ")}
-                  </Badge>
-                </div>
-
-                <div className="flex items-center justify-between text-sm text-gray-500 ">
-                  <div className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" />
-                    {job.location || "Remote"}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    {job.createdAt && !isNaN(new Date(job.createdAt).getTime()) ? formatDate(job.createdAt) : 'N/A'}
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base font-semibold leading-snug text-foreground">{job.title}</h3>
+                    <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                      <Building className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">{job.business?.businessName}</span>
+                    </p>
                   </div>
                 </div>
 
-                {job.salary && (
-                  <div className="flex items-center text-sm text-green-600 ">
-                    <DollarSign className="h-4 w-4 mr-1" />
-                    {job.salary}
-                  </div>
-                )}
+                <div className="flex flex-1 flex-col gap-3 px-4 py-4 sm:px-5">
+                  <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                    {job.description}
+                  </p>
 
-                {/* Divider and Button Row */}
-                <div className="w-full border-t mt-auto pt-4">
-                  <div className="flex justify-between w-full gap-2">
-                    <Button variant="outline" size="sm" asChild className="rounded-full px-4 py-1 text-xs">
-                      <Link href={`/jobs/${job.id}`}>View Details</Link>
-                    </Button>
-                    {user?.role === 'student' && (
-                      <Button
-                        onClick={() => handleApplyForJob(job.id)}
-                        disabled={applyingJobId === job.id || hasAppliedToJob(job)}
-                        size="sm"
-                        className={`rounded-full px-6 py-1 text-xs ${
-                          hasAppliedToJob(job) 
-                            ? 'bg-green-600 text-white cursor-not-allowed' 
-                            : 'bg-[#8F1A27] text-white hover:bg-[#6D0432]'
-                        }`}
-                      >
-                        {applyingJobId === job.id ? (
-                          <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Applying...</>
-                        ) : hasAppliedToJob(job) ? (
-                          'Applied'
-                        ) : (
-                          'Apply'
-                        )}
-                      </Button>
+                  <div className="flex flex-wrap gap-1.5">
+                    <Badge className={getJobTypeColor(job.type)}>{job.type.replace("_", " ")}</Badge>
+                    <Badge className={getExperienceColor(job.experienceLevel)}>
+                      {job.experienceLevel.replace("_", " ")}
+                    </Badge>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground sm:text-sm">
+                    <span className="flex items-center gap-1">
+                      <MapPin className="h-3.5 w-3.5" />
+                      {job.location || "Remote"}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5" />
+                      {job.createdAt && !isNaN(new Date(job.createdAt).getTime()) ? formatDate(job.createdAt) : 'N/A'}
+                    </span>
+                    {job.salary && (
+                      <span className="flex items-center gap-1 font-medium text-[color:var(--vt-teal-700)]">
+                        <DollarSign className="h-3.5 w-3.5" />
+                        {job.salary}
+                      </span>
                     )}
                   </div>
                 </div>
-              </Card>
+
+                <div className="mt-auto flex gap-2 border-t border-border/50 px-4 py-3 sm:px-5">
+                  <Button variant="outline" size="sm" asChild className="flex-1 text-xs">
+                    <Link href={`/jobs/${job.id}`}>View Details</Link>
+                  </Button>
+                  {user?.role === 'student' && (
+                    <Button
+                      onClick={() => handleApplyForJob(job.id)}
+                      disabled={applyingJobId === job.id || hasAppliedToJob(job)}
+                      size="sm"
+                      className={`flex-1 text-xs ${hasAppliedToJob(job) ? 'bg-green-600 text-white' : 'vt-btn-primary'}`}
+                    >
+                      {applyingJobId === job.id ? (
+                        <><Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> Applying</>
+                      ) : hasAppliedToJob(job) ? (
+                        'Applied'
+                      ) : (
+                        'Apply'
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </article>
             ))}
           </div>
         )}
@@ -336,7 +324,7 @@ console.log('Sample job data:', filteredJobs[0]);
                 </div>
                 {user?.role === 'student' && (
                   <Button
-                    className={`w-full ${hasAppliedToJob(viewJob) ? 'bg-green-600 text-white cursor-not-allowed' : 'bg-[#8F1A27] text-white'}`}
+                    className={`w-full ${hasAppliedToJob(viewJob) ? 'bg-green-600 text-white cursor-not-allowed' : 'vt-btn-primary'}`}
                     onClick={() => handleApplyForJob(viewJob.id)}
                     disabled={applyingJobId === viewJob.id || hasAppliedToJob(viewJob)}
                   >
@@ -353,8 +341,7 @@ console.log('Sample job data:', filteredJobs[0]);
             )}
           </DialogContent>
         </Dialog>
-      </div>
-    </div>
+    </PageShell>
   )
 }
 

@@ -14,6 +14,7 @@ import { useSearchParams } from 'next/navigation';
 import { fetchStudents, fetchStudentById } from '@/lib/slices/studentsSlice';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { PageShell, PageHeader } from '@/components/page-shell';
 
 function MessagesPageContent() {
   const dispatch = useAppDispatch();
@@ -257,7 +258,7 @@ function MessagesPageContent() {
               <p className="text-gray-600 mb-4">Unable to load student user information.</p>
               <Button 
                 onClick={() => router.back()}
-                className="bg-[#8F1A27] text-white hover:bg-[#6D0432]"
+                className="vt-btn-primary"
               >
                 Go Back
               </Button>
@@ -281,38 +282,33 @@ function MessagesPageContent() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <PageShell>
         <Toaster position="top-right" />
-        <div className="w-full px-4 md:px-8 py-6">
-          <div className="mb-6 flex items-center justify-between">
-            <div className="space-y-1">
-              <h1 className="text-2xl md:text-3xl font-bold text-[#8F1A27] leading-tight">
-                Messages
-              </h1>
-              <p className="text-base text-gray-600 font-medium">
-                Connect with CMU Community
-              </p>
-            </div>
-            <Button 
-              variant="outline" 
+        <PageHeader
+          badge="Inbox"
+          title="Messages"
+          subtitle="Connect with the VeriTalent community."
+          action={
+            <Button
+              variant="outline"
               onClick={() => {
-                // Route based on user role
                 if (user?.role === 'business') {
                   router.push('/business-dashboard');
                 } else {
                   router.push('/dashboard');
                 }
-              }} 
-              className="bg-white text-[#8F1A27] hover:bg-[#8F1A27] hover:text-white border-[#8F1A27] rounded-xl font-semibold px-6 py-2 transition-all duration-200 hover:shadow-lg"
+              }}
+              className="vt-btn-outline rounded-xl px-6 py-2"
             >
               Back to Dashboard
             </Button>
-          </div>
+          }
+        />
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[600px]">
+          <div className="grid h-[min(72vh,640px)] grid-cols-1 gap-6 lg:grid-cols-4">
             {/* Conversations List */}
             {!isDirectChat && (
-              <Card className="lg:col-span-1 border-0 shadow-xl rounded-2xl bg-white/90 backdrop-blur-sm">
+              <Card className="vt-section-card lg:col-span-1 overflow-hidden">
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg font-bold text-gray-900">Conversations</CardTitle>
@@ -323,14 +319,14 @@ function MessagesPageContent() {
                       placeholder="Search conversations..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 py-2 text-sm rounded-lg border-gray-200 focus:border-[#8F1A27] focus:ring-[#8F1A27]"
+                      className="pl-10 py-2 text-sm rounded-lg border-gray-200 focus:border-[var(--vt-teal-700)] focus:ring-[var(--vt-teal-700)]"
                     />
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
                   {isLoading ? (
                     <div className="flex items-center justify-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin text-[#8F1A27]" />
+                      <Loader2 className="h-6 w-6 animate-spin text-[var(--vt-teal-700)]" />
                     </div>
                   ) : error ? (
                     <Alert variant="destructive" className="m-4">
@@ -371,12 +367,12 @@ function MessagesPageContent() {
                               <div
                                 key={conversation.id}
                                 className={`p-3 cursor-pointer hover:bg-gray-50 rounded-lg transition-all duration-200 ${
-                                  selectedConversation?.id === conversation.id ? 'bg-[#8F1A27]/10 border border-[#8F1A27]/20' : ''
+                                  selectedConversation?.id === conversation.id ? 'bg-[var(--vt-teal-700)]/10 border border-[var(--vt-teal-700)]/20' : ''
                                 }`}
                                 onClick={() => handleSelectConversation(conversation)}
                               >
                                 <div className="flex items-center space-x-3">
-                                  <div className="relative h-10 w-10 rounded-full border border-gray-200 overflow-hidden bg-[#8F1A27] flex items-center justify-center">
+                                  <div className="relative h-10 w-10 rounded-full border border-gray-200 overflow-hidden bg-[var(--vt-teal-700)] flex items-center justify-center">
                                     {studentRecord?.profileImage ? (
                                       <Image
                                         src={(() => {
@@ -451,13 +447,13 @@ function MessagesPageContent() {
             )}
 
             {/* Chat Area */}
-            <Card className={`${isDirectChat ? 'lg:col-span-3 flex flex-col' : 'lg:col-span-3 flex flex-col'} border-0 shadow-xl rounded-2xl bg-white/90 backdrop-blur-sm`}>
+            <Card className={`vt-section-card flex flex-col ${isDirectChat ? 'lg:col-span-3' : 'lg:col-span-3'}`}>
               {selectedConversation ? (
                 <>
                   <CardHeader className="border-b border-gray-200 py-4 bg-gray-50 pt-6">
                     <div className="flex items-center justify-between ">
                       <div className="flex items-center space-x-3">
-                        <div className="relative h-10 w-10 rounded-full border border-gray-200 overflow-hidden bg-[#8F1A27] flex items-center justify-center">
+                        <div className="relative h-10 w-10 rounded-full border border-gray-200 overflow-hidden bg-[var(--vt-teal-700)] flex items-center justify-center">
                           {(() => {
                             const otherParticipant = selectedConversation.participants?.find((p: any) => p?.id !== user?.id);
                             const studentRecord = otherParticipant?.id ? students.find(s => s.user?.id === otherParticipant.id) : null;
@@ -504,7 +500,7 @@ function MessagesPageContent() {
                           <CardTitle className="text-lg font-bold text-gray-900">
                             {getParticipantName(selectedConversation, user?.id || '')}
                           </CardTitle>
-                          <CardDescription className="text-[#8F1A27] font-medium text-sm">Online</CardDescription>
+                          <CardDescription className="text-[var(--vt-teal-700)] font-medium text-sm">Online</CardDescription>
                         </div>
                       </div>
                     </div>
@@ -524,7 +520,7 @@ function MessagesPageContent() {
                                 <div
                                   className={`max-w-xs lg:max-w-md px-4 py-2 rounded-xl shadow-sm break-words ${
                                     isOwnMessage
-                                      ? 'bg-[#8F1A27] text-white rounded-br-none'
+                                      ? 'bg-[var(--vt-teal-700)] text-white rounded-br-none'
                                       : 'bg-gray-100 text-gray-900 rounded-bl-none'
                                   }`}
                                 >
@@ -559,12 +555,12 @@ function MessagesPageContent() {
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyDown={handleKeyPress}
                         disabled={isSending}
-                        className="flex-1 py-2 px-3 rounded-lg border-gray-200 focus:border-[#8F1A27] focus:ring-[#8F1A27] text-sm"
+                        className="flex-1 py-2 px-3 rounded-lg border-gray-200 focus:border-[var(--vt-teal-700)] focus:ring-[var(--vt-teal-700)] text-sm"
                       />
                       <Button
                         onClick={handleSendMessage}
                         disabled={isSending || !newMessage.trim()}
-                        className="bg-[#8F1A27] text-white hover:bg-[#6D0432] rounded-lg px-4 py-2 transition-all duration-200 hover:shadow-lg"
+                        className="vt-btn-primary rounded-lg px-4 py-2"
                       >
                         {isSending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                       </Button>
@@ -586,8 +582,7 @@ function MessagesPageContent() {
               )}
             </Card>
           </div>
-        </div>
-      </div>
+      </PageShell>
     </ProtectedRoute>
   );
 }

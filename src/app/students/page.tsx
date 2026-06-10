@@ -13,7 +13,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader2, Search, GraduationCap, MapPin, Star, Filter, X, Mail, Phone, Linkedin } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import brandLogo from '@/assets/ss.png';
 import { toast, Toaster } from 'react-hot-toast';
+import { PageShell, PageHeader } from '@/components/page-shell';
 
 export default function StudentsPage() {
   const dispatch = useAppDispatch();
@@ -98,23 +100,17 @@ export default function StudentsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] transition-colors duration-700 ease-in-out">
+    <PageShell>
       <Toaster position="top-right" />
-      <div className=" mx-auto px-10 py-8">
-        {/* Header */}
-        <div className="mb-8">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#8F1A27] mb-2 pt-2">Discover Students</h1>
-          {/* <p className="text-muted-foreground">Connect, collaborate, and grow with other talented students.</p> */}
-        </div>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            Connect, collaborate, and grow with other talented students.
-          </p>
-        </div>
+      <PageHeader
+        badge="Directory"
+        title="Discover Students"
+        subtitle="Connect, collaborate, and grow with other talented students."
+      />
 
         {/* Search and Filters */}
         <div className="mb-8 space-y-4">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="vt-search-panel flex flex-col gap-4 md:flex-row md:items-center">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
@@ -127,7 +123,7 @@ export default function StudentsPage() {
             <Button
               variant="outline"
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2"
+              className="vt-btn-outline flex items-center gap-2"
             >
               <Filter className="h-4 w-4" />
               Filters
@@ -141,7 +137,7 @@ export default function StudentsPage() {
           </div>
 
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg border">
+            <div className="vt-section-card grid grid-cols-1 gap-4 p-5 md:grid-cols-3">
               <div>
                 <label className="text-sm font-medium mb-2 block">Major</label>
                 <Select value={selectedMajor} onValueChange={setSelectedMajor}>
@@ -210,113 +206,74 @@ export default function StudentsPage() {
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="vt-grid-cards">
             {filteredStudents.map((student) => (
-              <Card key={student.id} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center text-center group overflow-hidden">
-                {/* Enhanced Profile Picture */}
-                <div className="relative mb-1 mt-3">
-                  <div className="relative h-24 w-24 rounded-full bg-gradient-to-br from-[#8F1A27]/10 to-[#6D0432]/10 border-4 border-[#8F1A27]/20 shadow-lg group-hover:scale-105 transition-transform duration-300 overflow-hidden">
+              <article
+                key={student.id}
+                className="vt-section-card vt-card-hover flex h-full flex-col overflow-hidden"
+              >
+                <div className="flex items-start gap-3.5 p-4 sm:p-5">
+                  <div className="vt-avatar-ring relative h-14 w-14 shrink-0 overflow-hidden rounded-full">
                     {(student.profileImage || (student.user as { profileImage?: string })?.profileImage) ? (
                       <Image
                         src={getFileUrl(student.profileImage || (student.user as { profileImage?: string })?.profileImage || "")}
                         alt={`${student.firstName} ${student.lastName}`}
-                        width={96}
-                        height={96}
-                        className="w-full h-full object-cover"
+                        width={56}
+                        height={56}
+                        className="h-full w-full object-cover"
                         onError={(e) => {
-                          // Hide the image and show fallback when it fails to load
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';
                           const fallback = target.parentElement?.querySelector('[data-fallback]') as HTMLElement;
                           if (fallback) fallback.style.display = 'flex';
                         }}
                         onLoad={(e) => {
-                          // Hide fallback when image loads successfully
                           const target = e.target as HTMLImageElement;
                           const fallback = target.parentElement?.querySelector('[data-fallback]') as HTMLElement;
                           if (fallback) fallback.style.display = 'none';
                         }}
                       />
                     ) : null}
-                    {/* Fallback initials - shown when no image or image fails to load */}
-                    <div 
-                      className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-[#8F1A27] bg-gradient-to-br from-[#8F1A27]/10 to-[#6D0432]/10"
+                    <div
+                      className="absolute inset-0 flex items-center justify-center bg-[color:var(--vt-mint-50)]"
                       data-fallback
                       style={{ display: (student.profileImage || (student.user as { profileImage?: string })?.profileImage) ? 'none' : 'flex' }}
                     >
-                      {getUserInitials(student.firstName, student.lastName)}
+                      <Image
+                        src={brandLogo}
+                        alt="VeriTalent"
+                        width={34}
+                        height={34}
+                        className="h-[58%] w-[58%] object-contain"
+                      />
                     </div>
                   </div>
-                  
-                  {/* Status indicator - using year as availability indicator */}
-                  {student.year && (
-                    <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-2 border-white shadow-sm ${
-                      student.year === 'GRADUATE' ? 'bg-green-500' :
-                      student.year === 'SENIOR' ? 'bg-blue-500' :
-                      student.year === 'JUNIOR' ? 'bg-yellow-500' :
-                      student.year === 'SOPHOMORE' ? 'bg-orange-500' :
-                      'bg-gray-400'
-                    }`}>
-                      <div className={`w-2 h-2 rounded-full bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${
-                        student.year === 'GRADUATE' ? 'bg-green-500' :
-                        student.year === 'SENIOR' ? 'bg-blue-500' :
-                        student.year === 'JUNIOR' ? 'bg-yellow-500' :
-                        student.year === 'SOPHOMORE' ? 'bg-orange-500' :
-                        'bg-gray-400'
-                      }`} />
-                    </div>
-                  )}
-                </div>
-                
-                <div className="w-full">
-                  <div className="font-bold text-xl text-gray-900 mb-2">{student.firstName} {student.lastName}</div>
-                  
-                  {student.year && (
-                    <div className="mb-5">
-                      <Badge className="bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800 rounded-full px-3 py-1 text-xs font-semibold border border-orange-200">
-                        {student.year.replace('_', ' ')}
-                      </Badge>
-                    </div>
-                  )}
-                  
-                  <div className="flex items-center justify-center gap-1 text-sm text-gray-600 mb-4">
-                    <GraduationCap className="h-4 w-4 text-[#8F1A27]" />
-                    <span className="font-medium">{(student.major || 'Undeclared').replace('_', ' ')}</span>
-                  </div>
-                  
-                  {/* Brief Bio */}
-                  {(student as unknown as { about?: string }).about && (
-                    <div className="mb-4 px-2">
-                      <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 font-normal text-left">
-                        {((student as unknown as { about: string }).about.length > 120) ? `${(student as unknown as { about: string }).about.substring(0, 120)}...` : (student as unknown as { about: string }).about}
-                      </p>
-                    </div>
-                  )}
-                
-                  {student.skills && student.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 justify-start mb-4 ">
-                      {student.skills.slice(0, 5).map(skill => (
-                        <Badge key={skill.id} className={`rounded-full px-2.5 py-1 text-xs font-medium border ${getProficiencyColor(skill.proficiency)}`}>{skill.name}</Badge>
-                      ))}
-                      {student.skills.length > 5 && (
-                        <Badge className="bg-gray-100 text-gray-600 rounded-full px-2.5 py-1 text-xs font-medium border border-gray-200">+{student.skills.length - 5}</Badge>
+
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-base font-semibold text-foreground">
+                      {student.firstName} {student.lastName}
+                    </h3>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                      {student.year && (
+                        <span className="vt-year-badge">{student.year.replace('_', ' ')}</span>
                       )}
                     </div>
-                  )}
-                </div>
-                
-                {/* Divider and Button Row */}
-                <div className="w-full border-t border-gray-200 mt-auto pt-4">
-                  <div className="flex justify-between w-full gap-3">
-                    <Button variant="outline" size="sm" asChild className="rounded-lg px-6 py-2 text-xs font-medium border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors">
-                      <Link href={`/students/${student.id}`}>View Profile</Link>
-                    </Button>
-                    <Button size="sm" className="rounded-lg px-10 py-2 text-xs font-medium bg-[#8F1A27] text-white hover:bg-[#6D0432] transition-colors shadow-sm" onClick={() => handleContact(student)}>
-                      Contact
-                    </Button>
+                    <p className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
+                      <GraduationCap className="h-3.5 w-3.5 shrink-0 text-[color:var(--vt-teal-600)]" />
+                      <span className="truncate">{(student.major || 'Undeclared').replace(/_/g, ' ')}</span>
+                    </p>
                   </div>
                 </div>
-              </Card>
+
+                <div className="mt-auto flex gap-2 border-t border-border/50 px-4 py-3 sm:px-5">
+                  <Button variant="outline" size="sm" asChild className="flex-1 text-xs">
+                    <Link href={`/students/${student.id}`}>View Profile</Link>
+                  </Button>
+                  <Button size="sm" className="vt-btn-primary flex-1 text-xs" onClick={() => handleContact(student)}>
+                    Contact
+                  </Button>
+                </div>
+              </article>
             ))}
           </div>
         )}
@@ -347,8 +304,7 @@ export default function StudentsPage() {
             </Button>
           </div>
         )}
-      </div>
-    </div>
+    </PageShell>
   );
 }
 

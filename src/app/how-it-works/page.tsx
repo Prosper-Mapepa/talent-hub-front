@@ -1,30 +1,170 @@
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
-import { CheckCircle, Users, Briefcase, MessageSquare, Star, CreditCard, Shield, Award } from "lucide-react"
+import {
+  ArrowRight,
+  Award,
+  Briefcase,
+  CreditCard,
+  GraduationCap,
+  MessageSquare,
+  Shield,
+  Star,
+  Users,
+  type LucideIcon,
+} from "lucide-react"
+
+type Step = {
+  icon: LucideIcon
+  title: string
+  description: string
+}
+
+const STUDENT_STEPS: Step[] = [
+  { icon: Users, title: "Create profile", description: "Build a verified profile with your skills and portfolio." },
+  { icon: Briefcase, title: "List talents", description: "Post services with clear pricing and work samples." },
+  { icon: MessageSquare, title: "Manage network", description: "Message clients and manage projects in one place." },
+  { icon: Star, title: "Build reputation", description: "Earn reviews that help you get hired again." },
+]
+
+const BUSINESS_STEPS: Step[] = [
+  { icon: Users, title: "Browse talents", description: "Search verified students by skill and category." },
+  { icon: Briefcase, title: "Post jobs", description: "Publish opportunities and review applications." },
+  { icon: CreditCard, title: "Connect & network", description: "Build relationships with student talent." },
+  { icon: Shield, title: "Quality assurance", description: "Verified profiles and platform protections." },
+]
+
+const TRUST_ITEMS: { icon: LucideIcon; title: string; description: string }[] = [
+  { icon: Shield, title: "Verified profiles", description: "Students verified through university credentials." },
+  { icon: MessageSquare, title: "Secure messaging", description: "Private, in-platform communication." },
+  { icon: Award, title: "Quality standards", description: "Reviews and support keep the community trusted." },
+]
+
+function IconBadge({ icon: Icon }: { icon: LucideIcon }) {
+  return (
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white ring-1 ring-[color:var(--vt-teal-600)]/12">
+      <Icon className="h-[18px] w-[18px] text-[color:var(--vt-teal-700)]" strokeWidth={1.75} />
+    </div>
+  )
+}
+
+function StepCard({
+  step,
+  icon: Icon,
+  title,
+  description,
+}: Step & { step: number }) {
+  const stepLabel = String(step).padStart(2, "0")
+
+  return (
+    <article className="flex h-full flex-col overflow-hidden rounded-xl border border-[color:var(--vt-teal-600)]/10 bg-white shadow-sm">
+      <div className="flex items-center justify-between gap-3 border-b border-[color:var(--vt-teal-600)]/8 bg-[color:var(--vt-mint-50)]/50 px-4 py-3.5 sm:px-5">
+        <span className="text-xl font-bold tabular-nums leading-none text-[color:var(--vt-teal-700)]">
+          {stepLabel}
+        </span>
+        <IconBadge icon={Icon} />
+      </div>
+      <div className="flex flex-1 flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5">
+        <h3 className="text-lg font-semibold leading-snug text-foreground">{title}</h3>
+        <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">{description}</p>
+      </div>
+    </article>
+  )
+}
+
+function TrustCard({ icon: Icon, title, description }: (typeof TRUST_ITEMS)[0]) {
+  return (
+    <article className="flex h-full flex-col overflow-hidden rounded-xl border border-[color:var(--vt-teal-600)]/10 bg-white shadow-sm">
+      <div className="flex items-center gap-3 border-b border-[color:var(--vt-teal-600)]/8 bg-[color:var(--vt-mint-50)]/50 px-4 py-3.5 sm:px-5">
+        <IconBadge icon={Icon} />
+        <h3 className="text-lg font-semibold leading-snug text-foreground">{title}</h3>
+      </div>
+      <p className="flex-1 px-4 py-4 text-sm leading-relaxed text-muted-foreground sm:px-5 sm:py-5 sm:text-base">
+        {description}
+      </p>
+    </article>
+  )
+}
+
+function FlowSection({
+  label,
+  title,
+  subtitle,
+  icon: SectionIcon,
+  steps,
+  variant,
+}: {
+  label: string
+  title: string
+  subtitle: string
+  icon: LucideIcon
+  steps: Step[]
+  variant: "mint" | "white"
+}) {
+  return (
+    <section
+      className={
+        variant === "mint"
+          ? "w-full bg-[color:var(--vt-mint-50)]/40 py-10 md:py-12"
+          : "w-full bg-white py-10 md:py-12"
+      }
+    >
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mb-6 md:mb-7">
+          <div className="mb-2 flex items-center gap-2">
+            <SectionIcon className="h-4 w-4 text-[color:var(--vt-teal-600)]" />
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--vt-teal-600)]">
+              {label}
+            </p>
+          </div>
+          <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            {title}
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">{subtitle}</p>
+        </div>
+
+        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {steps.map((step, index) => (
+            <StepCard key={step.title} step={index + 1} {...step} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-muted/20">
-      {/* Hero Section */}
-      <section className="bg-white py-12 px-4 md:px-8 md:py-16">
-        <div className="mx-auto max-w-6xl">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6">
-              How <span className="text-primary">VeriTalent</span> Works
-            </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Connect with talented students, showcase your skills, and grow your professional network all in one place.
+    <div className="flex flex-col">
+      {/* Hero */}
+      <section className="vt-hero -mt-16 text-white">
+        <div className="mx-auto w-full px-4 pb-16 pt-28 sm:px-8 lg:px-12 xl:px-16 md:pb-24 md:pt-36">
+          <div className="max-w-3xl">
+            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-white/60">
+              Simple · Verified · Connected
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
+            <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl">
+              How <span className="vt-hero-gold">VeriTalent</span> works
+            </h1>
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/85 md:text-xl">
+              One platform to showcase talent, find work, and connect with confidence.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/register">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg shadow-sm font-medium px-8 py-3">
-                  Start Networking
+                <Button
+                  size="lg"
+                  className="h-12 px-8 text-base bg-[color:var(--vt-teal-600)] text-white hover:bg-[color:var(--vt-teal-600)]/90"
+                >
+                  Start networking
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link href="/services">
-                <Button size="lg" variant="outline" className="border-border text-foreground hover:bg-accent rounded-lg font-medium px-8 py-3">
-                  Explore Talents
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-12 border-white/30 bg-transparent px-8 text-base text-white hover:bg-white/10"
+                >
+                  Explore talents
                 </Button>
               </Link>
             </div>
@@ -32,341 +172,64 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      {/* For Students Section */}
-      <section className="py-16 px-4 md:px-8">
-        <div className="mx-auto max-w-8xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">For Students</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Showcase your skills, build your portfolio, and connect with people who need your work.
+      <FlowSection
+        label="Students"
+        title="For students"
+        subtitle="Four steps from signup to your first client."
+        icon={GraduationCap}
+        steps={STUDENT_STEPS}
+        variant="mint"
+      />
+
+      <FlowSection
+        label="Businesses"
+        title="For businesses"
+        subtitle="Find, hire, and collaborate with verified student talent."
+        icon={Briefcase}
+        steps={BUSINESS_STEPS}
+        variant="white"
+      />
+
+      {/* Trust */}
+      <section className="w-full border-t border-[color:var(--vt-teal-600)]/8 bg-[color:var(--vt-mint-50)]/25 py-10 md:py-12">
+        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
+          <div className="mb-6 md:mb-7">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Trust & safety
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">
+              Built for a community you can rely on.
             </p>
           </div>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 ">
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader className="pb-4">
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <Users className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Create Profile</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">
-                  Sign up and create a detailed profile showcasing your Talents, skills, experience, and education.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Highlight your academic achievements</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Showcase your portfolio</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">List your skills and expertise</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader className="pb-4">
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <Briefcase className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">List Talents</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">
-                  Create Talent listings with detailed descriptions and media.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Showcase your Talents</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">See related Talents</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Upload examples of your work</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader className="pb-4">
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <MessageSquare className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Manage Network</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">
-                  Communicate with peers, start projects, and manage your connections.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Secure messaging system</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">File sharing capabilities</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Profile visibility</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader className="pb-4">
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <Star className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Build Reputation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">
-                  Receive reviews and ratings to build your professional reputation.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Collect peer testimonials</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Showcase your rating</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Earn verification badges</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+            {TRUST_ITEMS.map((item) => (
+              <TrustCard key={item.title} {...item} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* For Clients Section */}
-      <section className="py-16 px-4 md:px-8 bg-white">
-        <div className="mx-auto max-w-8xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">For Businesses</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Find talented students to help with your projects, events, and business needs.
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader className="pb-4">
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <Users className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Browse Talents</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">
-                  Explore profiles of talented students with various skills and expertise.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Search by Talent, skill, or category</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Filter by rating and experience</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">View detailed portfolios</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader className="pb-4">
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <Briefcase className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Post Jobs</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">
-                  Create job listings for your projects and receive proposals from qualified students.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Detailed job descriptions</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Secure messaging system</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Receive targeted applications</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader className="pb-4">
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <CreditCard className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Connect = Network </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">
-                  Connect with talented students to help with your projects, events, and business needs.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Connect with students</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Connect with departments</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Build your network</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader className="pb-4">
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <Shield className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Quality Assurance</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">
-                  Ensure quality with our review system and satisfaction guarantee.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Verified student profiles</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Data protection and privacy</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="mr-2 mt-0.5 h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">Satisfaction guarantee</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust & Safety Section */}
-      <section className="py-16 px-4 md:px-8">
-        <div className="mx-auto max-w-8xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">Trust & Safety</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We prioritize creating a safe and trusted environment for all users
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-3">
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader>
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <Shield className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Verified Profiles</CardTitle>
-                <CardDescription className="text-gray-600">
-                  All students are verified through their university email and credentials
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  We verify the identity and student status of all users to ensure a trusted community. Additional
-                  verification badges can be earned through document verification and completed projects.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader>
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <CreditCard className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Secure Messaging</CardTitle>
-                <CardDescription className="text-gray-600">
-                  All communications are protected with secure messaging system
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                    Our messaging system is protected with end-to-end encryption to ensure privacy and security. All messages are encrypted and decrypted on the client&apos;s device. 
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border shadow-sm rounded-2xl hover:shadow-md transition-shadow vt-card-hover">
-              <CardHeader>
-                <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
-                  <Award className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg font-bold text-gray-900">Quality Standards</CardTitle>
-                <CardDescription className="text-gray-600">
-                  We maintain high standards for all services offered on our platform
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Our review and rating system helps maintain quality standards across the platform. We also provide
-                  dispute resolution services to ensure fair outcomes for all parties.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="vt-hero py-20 text-white text-center ">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">Ready to Get Started?</h2>
-          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-            Join VeriTalent today to connect with verified talent or offer your skills to the community.
+      {/* CTA */}
+      <section className="vt-hero py-20 text-center text-white md:py-28">
+        <div className="mx-auto w-full max-w-2xl px-4 sm:px-6">
+          <h2 className="text-3xl font-extrabold md:text-4xl lg:text-5xl">Ready to get started?</h2>
+          <p className="mt-4 text-lg text-white/85 md:text-xl">
+            Join VeriTalent today—free to sign up.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link href="/register">
-              <Button size="lg" className="bg-white text-[color:var(--vt-teal-950)] hover:bg-white/90 rounded-lg font-medium px-8 py-3">
-                Start Networking
+              <Button size="lg" className="h-12 bg-white px-8 text-base text-[color:var(--vt-teal-950)] hover:bg-white/90">
+                Start networking
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
             <Link href="/services">
-              <Button size="lg" variant="outline" className="border-white/30 bg-white/5 text-white hover:bg-white/10 rounded-lg font-medium px-8 py-3">
-                Explore Talents
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-12 border-white/30 bg-white/5 px-8 text-base text-white hover:bg-white/10"
+              >
+                Explore talents
               </Button>
             </Link>
           </div>
@@ -375,4 +238,3 @@ export default function HowItWorksPage() {
     </div>
   )
 }
-

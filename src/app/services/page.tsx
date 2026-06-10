@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Checkbox } from "@/components/ui/checkbox"
 import Service from '../../assets/landdd.webp'
+import brandLogo from '@/assets/ss.png'
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { toast, Toaster } from "react-hot-toast"
@@ -19,6 +20,7 @@ import { fetchServices } from '@/lib/slices/servicesSlice';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import apiClient from '@/lib/apiClient';
 import { useRouter } from 'next/navigation';
+import { PageShell, PageHeader } from '@/components/page-shell';
 
 // Talent titles for filtering - these are the actual talent titles from the data
 const talentTitles = ["Music", "Research", "Design", "Writing", "Development", "Art", "Photography", "Video", "Media", "Marketing", "Consulting", "Tutoring"]
@@ -181,35 +183,33 @@ export default function ServicesPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] transition-colors duration-700 ease-in-out">
-      <div className="px-4 py-6 md:px-8 md:py-8">
+    <PageShell>
         <Toaster position="top-right" />
-        <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <div className="md:text-left">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-[#8F1A27] mb-2">Explore Talents</h1>
-            <p className="text-lg text-gray-600">Browse talents offered by CMU students</p>
-          </div>
-          <div className="flex w-full items-center gap-3 md:w-auto">
-            <div className="relative flex-1 md:w-[400px]">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input 
-                type="search" 
-                placeholder="Search talents..." 
-                className="pl-10 pr-4 h-12 border-2 border-gray-200 focus:border-[#6A0032] focus:ring-[#6A0032]/20 transition-all duration-200 bg-white shadow-sm" 
-                value={search} 
-                onChange={e => setSearch(e.target.value)} 
+        <PageHeader
+          badge="Marketplace"
+          title="Explore Talents"
+          subtitle="Browse services offered by verified students across campus."
+          action={
+            <div className="relative w-full md:w-[360px]">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search talents..."
+                className="h-12 border-border/60 bg-white pl-10 shadow-sm focus-visible:ring-[color:var(--vt-teal-600)]/30"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-          </div>
-        </div>
+          }
+        />
 
-        <div className="flex gap-6">
+        <div className="flex gap-8">
           {/* Filters Sidebar */}
-          <div className="hidden lg:block border border-gray-200 rounded-xl p-5 bg-white shadow-sm w-64 flex-shrink-0">
+          <div className="vt-section-card hidden w-64 flex-shrink-0 p-5 lg:block">
             <div className="space-y-5">
               <div>
                 <div className="mb-3 flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-[#6A0032]">Categories</h3>
+                  <h3 className="text-lg font-semibold text-[color:var(--vt-teal-950)]">Categories</h3>
                   {selectedCategories.length > 0 && (
                     <Button
                       variant="ghost"
@@ -228,7 +228,7 @@ export default function ServicesPage() {
                         id={`title-${title}`}
                         checked={selectedCategories.includes(title)}
                         onCheckedChange={checked => handleCategoryChange(title, !!checked)}
-                        className="data-[state=checked]:bg-[#6A0032] data-[state=checked]:border-[#6A0032]"
+                        className="data-[state=checked]:bg-[var(--vt-teal-700)] data-[state=checked]:border-[var(--vt-teal-700)]"
                       />
                       <label
                         htmlFor={`title-${title}`}
@@ -281,9 +281,9 @@ export default function ServicesPage() {
               <div className="mb-6">
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-gray-600">
-                    Showing <span className="font-semibold text-[#8F1A27]">{filteredTalents.length}</span> of <span className="font-semibold">{talents.length}</span> talents
+                    Showing <span className="font-semibold text-[var(--vt-teal-700)]">{filteredTalents.length}</span> of <span className="font-semibold">{talents.length}</span> talents
                     {selectedCategories.length > 0 && (
-                      <span className="ml-2 text-[#8F1A27]">
+                      <span className="ml-2 text-[var(--vt-teal-700)]">
                         in {selectedCategories.join(', ')}
                       </span>
                     )}
@@ -306,10 +306,10 @@ export default function ServicesPage() {
             )}
 
             {/* Talents Grid - 3 Cards Per Row */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+            <div className="vt-grid-cards-3">
             {isLoading ? (
               <div className="col-span-full flex justify-center items-center py-24">
-                <svg className="animate-spin h-8 w-8 text-[#6A0032]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin h-8 w-8 text-[var(--vt-teal-700)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
                 </svg>
@@ -336,14 +336,14 @@ export default function ServicesPage() {
               </div>
             ) : (
               filteredTalents.map(talent => (
-                <Card key={talent.id} className="group flex flex-col cursor-pointer hover:shadow-xl transition-all duration-300 overflow-hidden bg-white border-0 shadow-md hover:shadow-2xl" onClick={() => { setViewTalent(talent); setIsViewTalentOpen(true); }}>
+                <Card key={talent.id} className="vt-section-card vt-card-hover group flex cursor-pointer flex-col overflow-hidden" onClick={() => { setViewTalent(talent); setIsViewTalentOpen(true); }}>
                   {/* Large Media Section */} <div className="flex justify-between px-6 ">
                       
                         <div className="">
-                        <CardTitle className="text-xl font-bold text-[#6A0032]  group-hover:text-[#8F1A27] transition-colors">{talent.title}</CardTitle>
+                        <CardTitle className="text-xl font-bold text-[color:var(--vt-teal-950)] transition-colors group-hover:text-[color:var(--vt-teal-700)]">{talent.title}</CardTitle>
                         </div>
                         <div className="">
-                        <Badge className=" bg-[#FFC540] hover:bg-[#8F1A27] font-medium " variant="secondary">{talent.category}</Badge>
+                        <Badge className="vt-gold-badge border-0 font-medium" variant="secondary">{talent.category}</Badge>
                         </div>
                       
                     </div>
@@ -473,12 +473,15 @@ export default function ServicesPage() {
                     {/* Student info at the bottom */}
                     {talent.student && (
                       <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-800 mt-auto">
-                        <Avatar className="h-8 w-8 ring-2 ring-[#6A0032]/20">
-                          <AvatarFallback className="bg-[#6A0032] text-white text-sm font-semibold">{talent.student.firstName?.[0]}{talent.student.lastName?.[0]}</AvatarFallback>
+                        <Avatar className="h-8 w-8 ring-2 ring-[color:var(--vt-teal-600)]/15">
+                          <AvatarImage src={talent.student.profileImage ? getFileUrl(talent.student.profileImage) : undefined} alt="" />
+                          <AvatarFallback className="bg-[color:var(--vt-mint-50)] p-1">
+                            <Image src={brandLogo} alt="VeriTalent" width={20} height={20} className="h-full w-full object-contain" />
+                          </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
                           <span className="text-sm text-gray-700 dark:text-gray-200 font-semibold">{talent.student.firstName} {talent.student.lastName}</span>
-                          <p className="text-xs text-gray-500">CMU Student</p>
+                          <p className="text-xs text-gray-500">VeriTalent Student</p>
                         </div>
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           <Button size="sm" variant="outline" className="text-xs">
@@ -499,7 +502,7 @@ export default function ServicesPage() {
         <Dialog open={isViewTalentOpen} onOpenChange={setIsViewTalentOpen}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
             <DialogHeader className="flex-shrink-0">
-              <CardTitle className="text-2xl font-bold text-[#6A0032] mb-2">{viewTalent?.title}</CardTitle>
+              <CardTitle className="text-2xl font-bold text-[var(--vt-teal-700)] mb-2">{viewTalent?.title}</CardTitle>
               <DialogDescription className="mb-4 text-sm text-gray-700 dark:text-gray-200 line-clamp-3">
                 {viewTalent?.description?.length > 200 
                   ? `${viewTalent.description.substring(0, 200)}...` 
@@ -528,7 +531,7 @@ export default function ServicesPage() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="text-[#6A0032] border-[#6A0032] hover:bg-[#6A0032] hover:text-white"
+                          className="text-[var(--vt-teal-700)] border-[var(--vt-teal-700)] hover:bg-[var(--vt-teal-700)] hover:text-white"
                           onClick={() => openSlideshow(validFiles, 0)}
                         >
                           <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -633,7 +636,7 @@ export default function ServicesPage() {
                                       e.stopPropagation();
                                       openSlideshow(validFiles, fileIndex);
                                     }}
-                                    className="text-xs text-[#8F1A27] hover:text-[#6D0432] font-medium"
+                                    className="text-xs text-[var(--vt-teal-700)] hover:text-[var(--vt-teal-950)] font-medium"
                                   >
                                     View Slideshow
                                   </button>
@@ -672,7 +675,7 @@ export default function ServicesPage() {
           <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
             <DialogHeader className="flex-shrink-0">
               <div className="flex items-center justify-between">
-                <DialogTitle className="text-xl font-bold text-[#6A0032]">
+                <DialogTitle className="text-xl font-bold text-[var(--vt-teal-700)]">
                   Media Slideshow
                 </DialogTitle>
                 <div className="flex items-center gap-2">
@@ -682,7 +685,7 @@ export default function ServicesPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => setAutoPlay(!autoPlay)}
-                      className={`text-sm ${autoPlay ? 'text-[#6A0032]' : 'text-gray-500'}`}
+                      className={`text-sm ${autoPlay ? 'text-[var(--vt-teal-700)]' : 'text-gray-500'}`}
                     >
                       <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -751,7 +754,7 @@ export default function ServicesPage() {
                               href={fileUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[#6A0032] hover:text-[#8F1A27] font-medium mt-2 inline-block"
+                              className="text-[var(--vt-teal-700)] hover:text-[var(--vt-teal-700)] font-medium mt-2 inline-block"
                             >
                               Open Document
                             </a>
@@ -845,8 +848,7 @@ export default function ServicesPage() {
             </div>
           </DialogContent>
         </Dialog>
-      </div>
-    </div>
+    </PageShell>
   );
 }
 

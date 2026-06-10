@@ -14,7 +14,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Search, Briefcase, User, MessageSquare, Award, MapPin, Building, Calendar } from 'lucide-react';
+import { Loader2, Search, Briefcase, User, MessageSquare, Award, MapPin, Building, Calendar, Clock, DollarSign, Filter, X } from 'lucide-react';
+import Link from 'next/link';
 import { toast } from 'sonner';
 import { AddProjectForm, AddAchievementForm } from '@/components/portfolio-forms';
 import EditableSkills from '@/components/EditableSkills';
@@ -23,6 +24,7 @@ import type { Project, Achievement } from '@/lib/slices/studentsSlice';
 import { ProjectEditForm, AchievementEditForm } from '@/components/portfolio-forms';
 import Image from "next/image";
 import apiClient from '@/lib/apiClient';
+import { PageShell, PageHeader } from '@/components/page-shell';
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
@@ -158,6 +160,18 @@ export default function DashboardPage() {
   };
 
   // Helper to check if a job has been applied by the current student
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) return '1 day ago';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    return date.toLocaleDateString();
+  };
+
   const hasAppliedToJob = (job: { applications?: Array<{ student?: { id: string } }> }) => {
     if (!user?.studentId || !job.applications) return false;
     return job.applications.some((app: { student?: { id: string } }) => app.student?.id === user.studentId);
@@ -256,168 +270,152 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute allowedRoles={['student']}>
-      {/* Header Section */}
-      <section className="bg-[#F9FAFB] py-6 px-4 md:px-8 border-b border-gray-100">
-        <div className="mx-auto max-w-8xl">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-3">
-              <h1 className="text-3xl md:text-4xl font-extrabold text-[#8F1A27] leading-tight">
-                 Welcome, {student?.firstName || user?.firstName || user?.email} 👋
-              </h1>
-              <p className="text-xl text-gray-600 font-medium">
-                Your network is your net worth
-              </p>
-             
-            </div>
-            <Button className="bg-[#6D0432] text-white hover:bg-[#8F1A27] rounded-xl shadow-lg font-semibold px-8 py-3 text-base transition-all duration-200 hover:shadow-xl hover:scale-105">
+      <PageShell innerClassName="space-y-8">
+        <PageHeader
+          badge="Dashboard"
+          title={`Welcome, ${student?.firstName || user?.firstName || user?.email} 👋`}
+          subtitle="Your network is your net worth."
+          action={
+            <Button className="vt-btn-primary rounded-xl px-8 py-3 shadow-lg transition-all hover:shadow-xl">
               Download App
             </Button>
-          </div>
-        </div>
-      </section>
+          }
+        />
 
-      {/* Stats Cards */}
-      <div className="mx-auto max-w-8xl px-4 md:px-8 py-8 bg-[#F9FAFB]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="bg-white border-1 shadow rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex items-center">
-                <div className="bg-[#8F1A27]/10 rounded-2xl p-4 mr-4">
-                  <Briefcase className="h-7 w-7 text-[#8F1A27]" />
+        {/* Stats Cards */}
+        <div className="vt-grid-cards">
+          <Card className="vt-stat-card">
+            <CardContent className="p-5 sm:p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[color:var(--vt-mint-50)] ring-1 ring-[color:var(--vt-teal-600)]/10">
+                  <Briefcase className="h-5 w-5 text-[color:var(--vt-teal-700)]" />
                 </div>
                 <div>
-                  <p className="text-base font-semibold text-gray-600 mb-1">Campus Jobs</p>
-                  <p className="text-3xl font-bold text-gray-800">{availableJobs}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Campus Jobs</p>
+                  <p className="text-2xl font-bold text-foreground">{availableJobs}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-white border-1 shadow rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex items-center">
-                <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-2xl p-4 mr-4">
-                  <User className="h-7 w-7 text-green-600" />
+          <Card className="vt-stat-card">
+            <CardContent className="p-5 sm:p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[color:var(--vt-mint-50)] ring-1 ring-[color:var(--vt-teal-600)]/10">
+                  <User className="h-5 w-5 text-[color:var(--vt-teal-700)]" />
                 </div>
                 <div>
-                  <p className="text-base font-semibold text-gray-600 mb-1">Profile Views</p>
-                  <p className="text-3xl font-bold text-gray-800">{profileViews}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Profile Views</p>
+                  <p className="text-2xl font-bold text-foreground">{profileViews}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-white border-1 shadow rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex items-center">
-                <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl p-4 mr-4">
-                  <MessageSquare className="h-7 w-7 text-purple-600" />
+          <Card className="vt-stat-card">
+            <CardContent className="p-5 sm:p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[color:var(--vt-mint-50)] ring-1 ring-[color:var(--vt-teal-600)]/10">
+                  <MessageSquare className="h-5 w-5 text-[color:var(--vt-teal-700)]" />
                 </div>
                 <div>
-                  <p className="text-base font-semibold text-gray-600 mb-1">Total Conversations</p>
-                  <p className="text-3xl font-bold text-gray-800">{totalConversations}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Total Conversations</p>
+                  <p className="text-2xl font-bold text-foreground">{totalConversations}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-white border-1 shadow rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex items-center">
-                <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-4 mr-4">
-                  <Award className="h-7 w-7 text-orange-600" />
+          <Card className="vt-stat-card">
+            <CardContent className="p-5 sm:p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[color:var(--vt-mint-50)] ring-1 ring-[color:var(--vt-teal-600)]/10">
+                  <Award className="h-5 w-5 text-[color:var(--vt-teal-700)]" />
                 </div>
                 <div>
-                  <p className="text-base font-semibold text-gray-600 mb-1">Applications</p>
-                  <p className="text-3xl font-bold text-gray-800">{totalApplications}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Applications</p>
+                  <p className="text-2xl font-bold text-foreground">{totalApplications}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
-      </div>
 
-      {/* Main Content Section */}
-      <div className="min-h-screen bg-[#F9FAFB] transition-colors duration-700 ease-in-out">
-        <div className="mx-auto max-w-8xl px-4 md:px-8 py-6">
           {/* Tabs Section */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8 ">
-            <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm p-2 rounded-3xl shadow border border-gray-200/50 pb-9">
-              <TabsTrigger value="jobs" className="text-sm font-medium text-gray-600 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8F1A27] data-[state=active]:to-[#6D0432] data-[state=active]:text-white data-[state=active]:shadow-md rounded-3xl py-2 px-4 data-[state=active]:font-semibold hover:bg-gray-100 -mt-1">Campus Jobs</TabsTrigger>
-              <TabsTrigger value="skills" className="text-sm font-medium text-gray-600 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8F1A27] data-[state=active]:to-[#6D0432] data-[state=active]:text-white data-[state=active]:shadow-md rounded-3xl py-2 px-4 data-[state=active]:font-semibold hover:bg-gray-100 -mt-1">Skills</TabsTrigger>
-              <TabsTrigger value="portfolio" className="text-sm font-medium text-gray-600 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8F1A27] data-[state=active]:to-[#6D0432] data-[state=active]:text-white data-[state=active]:shadow-md rounded-3xl py-2 px-4 data-[state=active]:font-semibold hover:bg-gray-100 -mt-1">Portfolio</TabsTrigger>
-              <TabsTrigger value="applications" className="text-sm font-medium text-gray-600 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8F1A27] data-[state=active]:to-[#6D0432] data-[state=active]:text-white data-[state=active]:shadow-md rounded-3xl py-2 px-4 data-[state=active]:font-semibold hover:bg-gray-100 -mt-1">My Applications</TabsTrigger>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+            <TabsList className="vt-tab-list grid w-full grid-cols-2 md:grid-cols-4">
+              <TabsTrigger value="jobs" className="vt-tab-trigger">Campus Jobs</TabsTrigger>
+              <TabsTrigger value="skills" className="vt-tab-trigger">Skills</TabsTrigger>
+              <TabsTrigger value="portfolio" className="vt-tab-trigger">Portfolio</TabsTrigger>
+              <TabsTrigger value="applications" className="vt-tab-trigger">My Applications</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="jobs" className="space-y-8 ">
-              {/* Search and Filters */}
-              <Card className="border-0 shadow rounded-2xl bg-white/90 backdrop-blur-sm">
-                <CardContent className="px-8">
-                  <div className="space-y-6">
-                    {/* Search Bar and Filter Toggle */}
-                    <div className="flex items-center justify-between">
-                      <div className="relative flex-1 max-w-lg">
-                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        <Input
-                          placeholder="Search jobs..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-12 py-3 text-base rounded-xl border-gray-200 focus:border-[#8F1A27] focus:ring-[#8F1A27]"
-                        />
-                      </div>
-                      <Button
-                        variant="outline"
-                        onClick={() => setShowFilters(!showFilters)}
-                        className="flex items-center gap-3 ml-6 px-6 py-3 rounded-xl border-gray-200 hover:border-[#8F1A27] hover:bg-[#8F1A27]/5 transition-all duration-200"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
-                        </svg>
-                        Filters
-                      </Button>
-                    </div>
-                    
-                    {/* Filter Options */}
-                    {showFilters && (
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
-                        <Select value={selectedJobType} onValueChange={setSelectedJobType}>
-                          <SelectTrigger className="w-full rounded-xl border-gray-200 focus:border-[#8F1A27] focus:ring-[#8F1A27]">
-                            <SelectValue placeholder="Job Type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Types</SelectItem>
-                            <SelectItem value="FULL_TIME">Full Time</SelectItem>
-                            <SelectItem value="PART_TIME">Part Time</SelectItem>
-                            <SelectItem value="INTERNSHIP">Internship</SelectItem>
-                            <SelectItem value="CONTRACT">Contract</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Select value={selectedExperience} onValueChange={setSelectedExperience}>
-                          <SelectTrigger className="w-full rounded-xl border-gray-200 focus:border-[#8F1A27] focus:ring-[#8F1A27]">
-                            <SelectValue placeholder="Experience Level" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Levels</SelectItem>
-                            <SelectItem value="ENTRY_LEVEL">Entry Level</SelectItem>
-                            <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
-                            <SelectItem value="SENIOR">Senior</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Button 
-                          variant="outline" 
-                          onClick={() => {
-                            setSearchTerm('');
-                            setSelectedJobType('all');
-                            setSelectedExperience('all');
-                          }}
-                          className="w-full rounded-xl border-gray-200 hover:border-[#8F1A27] hover:bg-[#8F1A27]/5 transition-all duration-200"
-                        >
-                          Clear Filters
-                        </Button>
-                      </div>
-                    )}
+            <TabsContent value="jobs" className="space-y-6">
+              <div className="space-y-4">
+                <div className="vt-search-panel flex flex-col items-center gap-4 md:flex-row">
+                  <div className="relative flex-1 w-full">
+                    <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <Input
+                      placeholder="Search jobs, companies, or keywords..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 py-3 rounded-lg border-gray-200 focus:ring-2 focus:ring-[color:var(--vt-teal-700)]/30"
+                    />
                   </div>
-                </CardContent>
-              </Card>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="vt-btn-outline flex items-center gap-2 px-6 py-3"
+                  >
+                    <Filter className="h-5 w-5" />
+                    Filters
+                  </Button>
+                  {(searchTerm || selectedJobType !== 'all' || selectedExperience !== 'all') && (
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        setSearchTerm('');
+                        setSelectedJobType('all');
+                        setSelectedExperience('all');
+                      }}
+                      className="flex items-center gap-2 px-6 py-3"
+                    >
+                      <X className="h-5 w-5" />
+                      Clear
+                    </Button>
+                  )}
+                </div>
 
-              {/* Job Listings */}
+                {showFilters && (
+                  <div className="vt-section-card grid grid-cols-1 gap-4 p-6 md:grid-cols-3">
+                    <Select value={selectedJobType} onValueChange={setSelectedJobType}>
+                      <SelectTrigger className="w-full rounded-lg border-gray-200">
+                        <SelectValue placeholder="All job types" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Job Types</SelectItem>
+                        <SelectItem value="FULL_TIME">Full Time</SelectItem>
+                        <SelectItem value="PART_TIME">Part Time</SelectItem>
+                        <SelectItem value="INTERNSHIP">Internship</SelectItem>
+                        <SelectItem value="CONTRACT">Contract</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Select value={selectedExperience} onValueChange={setSelectedExperience}>
+                      <SelectTrigger className="w-full rounded-lg border-gray-200">
+                        <SelectValue placeholder="All experience levels" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Experience Levels</SelectItem>
+                        <SelectItem value="ENTRY_LEVEL">Entry Level</SelectItem>
+                        <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
+                        <SelectItem value="SENIOR">Senior</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+
+              <p className="text-sm text-muted-foreground">
+                {jobsLoading ? 'Loading jobs...' : `${filteredJobs.length} job${filteredJobs.length !== 1 ? 's' : ''} found`}
+              </p>
+
               {jobsLoading ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="h-8 w-8 animate-spin" />
@@ -427,74 +425,78 @@ export default function DashboardPage() {
                   <AlertDescription>{jobsError}</AlertDescription>
                 </Alert>
               ) : filteredJobs.length === 0 ? (
-                <div className="text-center text-gray-500 py-12">No jobs found.</div>
+                <div className="text-center text-muted-foreground py-12">No jobs found.</div>
               ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="vt-grid-cards-wide">
                   {filteredJobs.map((job) => (
-                    <Card key={job.id} className="hover:shadow-2xl transition-all duration-300 rounded-2xl border-0 bg-white/90 backdrop-blur-sm py-8 px-0 flex flex-col justify-between min-h-[280px] hover:-translate-y-1">
-                      <CardHeader className="pb-4">
-                        <div className="flex justify-between items-start">
-                          <div className="space-y-2">
-                            <CardTitle className="text-lg font-bold text-gray-900">{job.title}</CardTitle>
-                            <CardDescription className="flex items-center text-gray-600 font-medium">
-                              <Building className="h-5 w-5 mr-2 text-[#8F1A27]" />
-                              {job.business?.businessName}
-                            </CardDescription>
-                          </div>
-                          <div className="flex flex-col gap-2 items-end">
-                            <Badge className={`${getJobTypeColor(job.type)} rounded-full px-3 py-1 font-semibold`}>{job.type.replace('_', ' ')}</Badge>
-                            <Badge className={`${getExperienceColor(job.experienceLevel)} rounded-full px-3 py-1 font-semibold`}>{job.experienceLevel.replace('_', ' ')}</Badge>
-                          </div>
+                    <article key={job.id} className="vt-section-card vt-card-hover flex h-full flex-col overflow-hidden">
+                      <div className="flex items-start gap-3 border-b border-border/50 bg-[color:var(--vt-mint-50)]/40 px-4 py-3.5 sm:px-5">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white ring-1 ring-[color:var(--vt-teal-600)]/10">
+                          <Briefcase className="h-5 w-5 text-[color:var(--vt-teal-700)]" />
                         </div>
-                      </CardHeader>
-                      <CardContent className="flex-1 flex flex-col justify-between">
-                        <p className="text-base text-gray-600 leading-relaxed mb-6 line-clamp-3">{job.description}</p>
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-6 text-sm text-gray-600">
-                              <span className="flex items-center font-medium">
-                                <MapPin className="h-5 w-5 mr-2 text-[#8F1A27]" />
-                                {job.business?.location || 'Remote'}
-                              </span>
-                              {job.salary && (
-                                <span className="flex items-center font-semibold text-green-700">
-                                  <span className="">${job.salary.replace(/[^.,-]/g, '')}</span>
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex gap-3 justify-end">
-                            {user?.role === 'student' && (
-                              <Button
-                                onClick={() => handleApplyForJob(job.id)}
-                                disabled={applyingJobId === job.id || hasAppliedToJob(job)}
-                                className={` py-3 rounded-xl shadow-lg transition-all duration-200 font-semibold px-6 ${
-                                  hasAppliedToJob(job) 
-                                    ? 'bg-green-600 text-white border-0 cursor-not-allowed px-8' 
-                                    : 'bg-[#8F1A27] text-white hover:bg-[#6D0432] hover:shadow-xl'
-                                }`}
-                              >
-                                {applyingJobId === job.id ? (
-                                  <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Applying...</>
-                                ) : hasAppliedToJob(job) ? (
-                                  'Applied'
-                                ) : (
-                                  'Apply'
-                                )}
-                              </Button>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-base font-semibold leading-snug text-foreground">{job.title}</h3>
+                          <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                            <Building className="h-3.5 w-3.5 shrink-0" />
+                            <span className="truncate">{job.business?.businessName}</span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-1 flex-col gap-3 px-4 py-4 sm:px-5">
+                        <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                          {job.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-1.5">
+                          <Badge className={getJobTypeColor(job.type)}>{job.type.replace('_', ' ')}</Badge>
+                          {job.experienceLevel && (
+                            <Badge className={getExperienceColor(job.experienceLevel)}>
+                              {job.experienceLevel.replace('_', ' ')}
+                            </Badge>
+                          )}
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground sm:text-sm">
+                          <span className="flex items-center gap-1">
+                            <MapPin className="h-3.5 w-3.5" />
+                            {job.location || job.business?.location || 'Remote'}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3.5 w-3.5" />
+                            {job.createdAt && !isNaN(new Date(job.createdAt).getTime()) ? formatDate(job.createdAt) : 'N/A'}
+                          </span>
+                          {job.salary && (
+                            <span className="flex items-center gap-1 font-medium text-[color:var(--vt-teal-700)]">
+                              <DollarSign className="h-3.5 w-3.5" />
+                              {job.salary}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="mt-auto flex gap-2 border-t border-border/50 px-4 py-3 sm:px-5">
+                        <Button variant="outline" size="sm" asChild className="flex-1 text-xs">
+                          <Link href={`/jobs/${job.id}`}>View Details</Link>
+                        </Button>
+                        {user?.role === 'student' && (
+                          <Button
+                            onClick={() => handleApplyForJob(job.id)}
+                            disabled={applyingJobId === job.id || hasAppliedToJob(job)}
+                            size="sm"
+                            className={`flex-1 text-xs ${hasAppliedToJob(job) ? 'bg-green-600 text-white' : 'vt-btn-primary'}`}
+                          >
+                            {applyingJobId === job.id ? (
+                              <><Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> Applying</>
+                            ) : hasAppliedToJob(job) ? (
+                              'Applied'
+                            ) : (
+                              'Apply'
                             )}
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => { setViewJob(job); setIsViewJobOpen(true); }}
-                              className="py-3 px-6 rounded-xl border-gray-200 hover:border-[#8F1A27] hover:bg-[#8F1A27]/5 text-gray-600 font-semibold transition-all duration-200"
-                            >
-                              View More
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                          </Button>
+                        )}
+                      </div>
+                    </article>
                   ))}
                 </div>
               )}
@@ -869,8 +871,7 @@ export default function DashboardPage() {
               </Card>
             </TabsContent>
           </Tabs>
-        </div>
-      </div>
+      </PageShell>
     </ProtectedRoute>
   );
 }

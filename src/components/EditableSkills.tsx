@@ -107,7 +107,7 @@ export default function EditableSkills({ studentId, skills, disabled = false, on
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
-          <Button type="submit" disabled={loading || !newSkill.name} className="bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold px-10">
+          <Button type="submit" disabled={loading || !newSkill.name} className="bg-[var(--vt-teal-700)] hover:bg-[var(--vt-teal-950)] text-white font-semibold px-10">
             {loading ? "Adding..." : "Add"}
           </Button>
         </form>

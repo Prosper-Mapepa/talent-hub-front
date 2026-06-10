@@ -43,7 +43,7 @@ export function AddProjectForm({ studentId, onSuccess, disabled = false }: { stu
       <Input placeholder="Project Title" value={title} onChange={e => setTitle(e.target.value)} required disabled={disabled} />
       <Textarea placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} required disabled={disabled} />
       <Input type="file" accept="image/*,application/pdf" multiple onChange={e => setFile(e.target.files ? Array.from(e.target.files) : null)} disabled={disabled} />
-      <Button type="submit" className='bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold px-10 mt-4' disabled={loading || disabled}>{loading ? 'Adding...' : 'Add Project'}</Button>
+      <Button type="submit" className='bg-[var(--vt-teal-700)] hover:bg-[var(--vt-teal-950)] text-white font-semibold px-10 mt-4' disabled={loading || disabled}>{loading ? 'Adding...' : 'Add Project'}</Button>
     </form>
   );
 }
@@ -87,7 +87,7 @@ export function AddAchievementForm({ studentId, onSuccess, disabled = false }: {
       <Input placeholder="Achievement Title" value={title} onChange={e => setTitle(e.target.value)} required disabled={disabled} />
       <Textarea placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} required disabled={disabled} />
       <Input type="file" accept="image/*,application/pdf" multiple onChange={e => setFile(e.target.files ? Array.from(e.target.files) : null)} disabled={disabled} />
-      <Button type="submit" className='bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold px-10 mt-4' disabled={loading || disabled}>{loading ? 'Adding...' : 'Add Achievement'}</Button>
+      <Button type="submit" className='bg-[var(--vt-teal-700)] hover:bg-[var(--vt-teal-950)] text-white font-semibold px-10 mt-4' disabled={loading || disabled}>{loading ? 'Adding...' : 'Add Achievement'}</Button>
     </form>
   );
 }
@@ -124,7 +124,7 @@ export function ProjectEditForm({ project, studentId, onSuccess, disabled = fals
     <form onSubmit={disabled ? undefined : handleSubmit} className="space-y-2 mt-4">
       <Input placeholder="Project Title" value={title} onChange={e => setTitle(e.target.value)} required disabled={disabled} />
       <Textarea placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} required disabled={disabled} />
-      <Button type="submit" className='bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold px-10 mt-4' disabled={loading || disabled}>{loading ? 'Saving...' : 'Save Changes'}</Button>
+      <Button type="submit" className='bg-[var(--vt-teal-700)] hover:bg-[var(--vt-teal-950)] text-white font-semibold px-10 mt-4' disabled={loading || disabled}>{loading ? 'Saving...' : 'Save Changes'}</Button>
     </form>
   );
 }
@@ -161,7 +161,7 @@ export function AchievementEditForm({ achievement, studentId, onSuccess, disable
     <form onSubmit={disabled ? undefined : handleSubmit} className="space-y-2 mt-4">
       <Input placeholder="Achievement Title" value={title} onChange={e => setTitle(e.target.value)} required disabled={disabled} />
       <Textarea placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} required disabled={disabled} />
-      <Button type="submit" className='bg-[#8F1A27] hover:bg-[#6D0432] text-white font-semibold px-10 mt-4' disabled={loading || disabled}>{loading ? 'Saving...' : 'Save Changes'}</Button>
+      <Button type="submit" className='bg-[var(--vt-teal-700)] hover:bg-[var(--vt-teal-950)] text-white font-semibold px-10 mt-4' disabled={loading || disabled}>{loading ? 'Saving...' : 'Save Changes'}</Button>
     </form>
   );
 } 
