@@ -106,7 +106,9 @@ export default function RegisterPage() {
 
   useEffect(() => {
     if (error) toast.error(error)
-    return () => dispatch(clearError())
+    return () => {
+      dispatch(clearError())
+    }
   }, [error, dispatch])
 
   useEffect(() => {
